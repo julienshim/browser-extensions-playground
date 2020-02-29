@@ -3,7 +3,9 @@ console.log("Chrome extension running");
 const clear = () => {
   console.log("cleared");
   const ytdThumbnails = document.querySelectorAll("ytd-thumbnail");
-  for (el of ytdThumbnails) {
+  const ytdPlaylists = document.querySelectorAll("ytd-compact-playlist-renderer");
+  const nodes = [...ytdThumbnails, ...ytdPlaylists];
+  for (el of nodes) {
     el.style.display = "none";
   }
 };
