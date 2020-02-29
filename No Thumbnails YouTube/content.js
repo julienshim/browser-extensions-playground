@@ -1,13 +1,13 @@
 console.log("Chrome extension running");
 
 const clear = () => {
-  console.log("cleared");
   const ytdThumbnails = document.querySelectorAll("ytd-thumbnail");
   const ytdPlaylists = document.querySelectorAll("ytd-compact-playlist-renderer");
   const nodes = [...ytdThumbnails, ...ytdPlaylists];
   for (el of nodes) {
     el.style.display = "none";
   }
+  console.log("YouTube video thumbnails and compact playlists cleared!");
 };
 
 const target = document.body;
