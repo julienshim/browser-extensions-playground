@@ -1,0 +1,1 @@
+console.log('Popup.html is connected to popup.js...')
