@@ -185,4 +185,48 @@ for (key in obj) {
   }
 }
 
-console.log(list.join("\n"));
+// console.log(list.join("\n"));
+
+
+// Points of interest
+
+var poi = ['produce', 'release', 'direct', 'screenplay', 'adapted', 'develop', 'consult', 'praise', 'premier', 'festival', 'gross', 'award', 'nominat', 'highest', 'story', 'music', 'cinemat', 'edit', 'product', 'distrib', 'release', 'budget', 'box', 'sequel', 'score', 'Rotten Tomatoes', 'top ten', 'ranked', 'star'];
+var raw = [...document.querySelectorAll('p')];
+var interests = []
+var filinterests = [];
+
+raw.forEach(x => {
+    
+  // interests = interests.concat(` ${x.textContent}`.match(/\s+[^.]*[.]/gi))
+    interests = interests.concat(` ${x.textContent}`.split(/(?<!\..)[.?!]\s+/gi))
+  // interests = interests.concat(` ${x.textContent}`.replace(/\s[a-z]{1,2}\./, ).replace(/\[\d{1,2}\]/gi, '').replace(/\s{2}/, " ").split(/(?<!\..)[.?!]\s+/gi).map(x=> `${x.trim()}.`).filter(x => x.split(' ').length < 30))
+  
+   
+})
+
+interests = interests.filter(x => x.trim()).map(x=> `${x.trim()}.`)
+
+var n = 0;
+var clean = [];
+
+while (n < interests.length) {
+  if(interests[n].match(/\s[a-z]{1,2}\./gi)) {
+      clean.push(`${interests[n]} ${interests[n+1]}`)
+      n += 2    
+  } else {
+      clean.push(interests[n])
+      n+= 1
+  }
+}
+
+clean.forEach(x => {
+  poi.forEach(y => {
+    if (x.includes(y)){
+      filinterests.push(x);
+    }
+  })
+})
+
+
+
+console.log([...new Set(filinterests)].filter(x => x.split(" ").length < 30).map(x => x.replace(/\[\d{1,2}\]/gi, '')));
