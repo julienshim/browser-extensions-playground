@@ -4,4 +4,4 @@ var userRating = document.querySelector('#title-overview-widget > div.vital > di
 var url = window.location.href.match(/https:\/\/www.imdb.com\/title\/tt+\d{1,}/)[0];
 var ratingUrl = `${url}/ratings?ref_=tt_ov_rt`;
 
-console.log(`${userRating[1]} IMDB users have given a weighted average vote of ${userRating[0].split("/").join(" / ")} for ${title}\t${ratingUrl}`);
+console.log(`What was the IDMB users rating for ${title}\t${userRating[1]} IMDB users have given a weighted average vote of ${userRating[0].split("/").join(" / ")} for ${title}\t${ratingUrl}`);
