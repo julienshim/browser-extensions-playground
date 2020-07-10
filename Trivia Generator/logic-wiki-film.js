@@ -204,15 +204,18 @@ for (key in media.infobox) {
   var possessive = title[title.length-1] === 's' ? '\'s' : '\'s';
   var source = media.source;
   var line = [];
+  var isPresent = infobox[key].join(" ").toLowerCase().includes('present') && media.type !== 'film';
+  var tense = isPresent ? "is" : "was";
+
   switch(key) {
     case "Based on":
-      line = [`What is ${title} based on?`, `${capitalizeFirstLetter(title)} is based on ${chain2(infobox[key])}.`, `${source}`]
+      line = [`What ${tense} ${title} based on?`, `${capitalizeFirstLetter(title)} ${tense} based on ${chain2(infobox[key])}.`, `${source}`]
       break;
     case "Box office":
       line = [`How did ${title} do at the box office?`, `${capitalizeFirstLetter(title)} earned ${chain2(infobox[key])} at the box office.`, `${source}`]
       break;
     case "Budget":
-      line = [`What the budget of ${title}?`, `The budget of ${capitalizeFirstLetter(title)} is ${chain2(infobox[key])}.`, `${source}`]
+      line = [`What was the budget of ${title}?`, `The budget of ${title} ${tense} ${chain2(infobox[key])}.`, `${source}`]
       break;
     // case "Cantonese":
       
@@ -223,9 +226,9 @@ for (key in media.infobox) {
     case "Cinematography":
       line = [`Who was the cinematography for ${title} by?`, `The cinematography for ${title} was by ${chain2(infobox[key])}.`, `${source}`]
       break;
-    // case "Composer":
-      
-    //   break;
+    case "Composer":
+      line = [`Who${tense}the composer for ${title} by?`, `The composer for ${title} ${tense} ${chain2(infobox[key])}.`, `${source}`]
+      break;
     case "Country":
       line = [`What is the country of ${title}?`, `The country of ${title} is ${chain2(infobox[key])}.`, `${source}`]
       break;
@@ -242,7 +245,7 @@ for (key in media.infobox) {
       line = [`Who distributed ${title}?`, `${capitalizeFirstLetter(title)} was distributed by ${chain2(infobox[key])}.`, `${source}`]
       break;
     case "Distributor":
-      line = [`Who the distributor for ${title}?`, `The distributor for${title} is  ${chain2(infobox[key])}.`, `${source}`]
+      line = [`Who is the distributor for ${title}?`, `The distributor for${title} is  ${chain2(infobox[key])}.`, `${source}`]
       break;
     case "Edited by":
       line = [`Who edited ${title}?`, `${capitalizeFirstLetter(title)} was edited by ${chain2(infobox[key])}.`, `${source}`]
@@ -256,9 +259,9 @@ for (key in media.infobox) {
     // case "Episodes":
       
     //   break;
-    // case "Executive producer":
-      
-    //   break;
+    case "Executive producer":
+      line = [`Who ${tense} the executive producer for ${title} by?`, `The executive producer for ${title} ${tense} by ${chain2(infobox[key])}.`, `${source}`]
+      break;
     case "Genre":
       line = [`What is the genre of ${title}?`, `The genre of ${title} is ${chain2(infobox[key])}.`, `${source}`]
       break;
@@ -272,35 +275,35 @@ for (key in media.infobox) {
     case "Music by":
       line = [`Who was the music for ${title} by?`, `The music for ${title} was by ${chain2(infobox[key])}.`, `${source}`]
       break;
-    // case "No. of episodes":
-      
-    //   break;
-    // case "No. of seasons":
-      
-    //   break;
+    case "No. of episodes":
+      line = [`How many episodes does ${title} have?`, `The number of episodes for ${title} is ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    case "No. of seasons":
+      line = [`How many seasons does ${title} have?`, `The number of seasons for ${title} is ${chain2(infobox[key])}.`, `${source}`]
+      break;
     // case "Opening theme":
       
     //   break;
     case "Original language":
-      line = [`What was ${title}${possessive} original language?`, `${title}${possessive} original language was ${chain2(infobox[key])}.`, `${source}`]
+      line = [`What was ${title}${possessive} original language?`, `${capitalizeFirstLetter(title)}${possessive} original language was ${chain2(infobox[key])}.`, `${source}`]
       break;
-    // case "Original network":
-      
-    //   break;
+    case "Original network":
+      line = [`What network was ${title} originally on?`, `${title}${possessive} was originally on ${chain2(infobox[key])}.`, `${source}`]
+      break;
     case "Original release":
-      line = [`Who was ${title}${possessive} original release?`, `${capitalizeFirstLetter(title)}${possessive} original release was ${chain2(infobox[key])}.`, `${source}`]
+      line = [`When was ${title}${possessive} originally release?`, `${capitalizeFirstLetter(title)} was originally released ${isPresent ? infobox[key].join(" ").replace("–", "to the") : infobox[key].join(" ").replace("–", "to")}.`, `${source}`]
       break;
     // case "Original run":
       
     //   break;
-    // case "Preceded by":
-      
-    //   break;
+    case "Preceded by":
+      line = [`What series was ${title} preceded by?`, `${capitalizeFirstLetter(title)}${possessive} was preceded by ${chain2(infobox[key])}.`, `${source}`]
+      break;
     case "Produced by":
-      line = [`Who produced ${title}?`, `${capitalizeFirstLetter(title)} was produced by ${chain2(infobox[key])}.`, `${source}`]
+      line = [`Who produced ${title}?`, `${capitalizeFirstLetter(title)} ${tense} produced by ${chain2(infobox[key])}.`, `${source}`]
       break;
     case "Producer":
-      line = [`Who was the produce for ${title}?`, `The produce for ${capitalizeFirstLetter(title)} was ${chain2(infobox[key])}.`, `${source}`]
+      line = [`Who ${tense} the producer for ${title}?`, `The producer for ${capitalizeFirstLetter(title)} ${tense} ${chain2(infobox[key])}.`, `${source}`]
       break;
     // case "Production companies":
     //   list.push(
@@ -312,12 +315,12 @@ for (key in media.infobox) {
     case "Production company":
       line = [`What company produced ${title}?`, `${capitalizeFirstLetter(title)} was produced by ${chain2(infobox[key])}.`, `${source}`]
       break;
-    // case "Production location":
-      
-    //   break;
-    // case "Related shows":
-      
-    //   break;
+    case "Production location":
+      line = [`Where ${tense} ${title} produced?`, `${capitalizeFirstLetter(title)} ${tense} produced in ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    case "Related shows":
+      line = [`What is a show that's related to ${title}?`, `${capitalizeFirstLetter(title)} is related to the ${chain2(infobox[key])}.`, `${source}`]
+      break;
     case "Release date":
       line = [`When was ${title} released?`, `${capitalizeFirstLetter(title)} was released on ${chain2(infobox[key])}.`, `${source}`]
       break;
@@ -339,7 +342,7 @@ for (key in media.infobox) {
     default:
       console.log(`Error:\t${key} is unaccounted for.\tSend help!`)
   }
-  list.push(line.join("\t"))
+    list.push(line.join("\t"))
 }
 
 function shuffleArray(array) {
@@ -352,6 +355,7 @@ function shuffleArray(array) {
   return array;
 }
 
+list = list.filter(x => x);
 console.log(list)
 console.log(shuffleArray(list).join("\n"));
 
