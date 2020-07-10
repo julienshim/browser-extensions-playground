@@ -8,7 +8,7 @@ Memrise Scraper is a browser extension that pulls the data from any public Memri
 
 ## Browser Compatibility
 
-- Chome
+- Google Chrome
 
 ## Future Updates
 
