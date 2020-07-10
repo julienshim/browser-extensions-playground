@@ -9,7 +9,7 @@ var media = {
   },
   type: undefined,
   infobox: {},
-  pluralCountrys: {
+  pluralCountries: {
     "United States": true,
     France: false,
     China: false,
@@ -98,13 +98,28 @@ formatTitle(document.querySelector("#firstHeading").textContent);
 function chain(array) {
   // TODO
   var length = array.length;
-
   if (length === 0) {
     return "";
   } else if (length === 1) {
     return `${array[0]}`;
   } else if (length === 2) {
     return `${array[0]} and ${array[1]}`;
+  } else {
+    return `${array.splice(0, array.length - 1).join(", ")}, and ${
+      array[array.length - 1]
+    }`;
+  }
+}
+
+function chain2(array) {
+  // TODO
+  var length = array.length;
+  if (length === 0) {
+    return "";
+  } else if (length === 1) {
+    return `${array[0]}`;
+  } else if (length === 2) {
+    return `${array[0]}, and ${array[1]}`;
   } else {
     return `${array.splice(0, array.length - 1).join(", ")}, and ${
       array[array.length - 1]
@@ -123,7 +138,6 @@ function splitBy(array) {
   }
   return temp.map((item) => {
     var [book, author] = item.split("by ");
-    console.log(item);
     return [book.trim(), chain(author.trim().split(/\n/))].join(" by ");
   });
 }
@@ -142,170 +156,204 @@ while (el !== null) {
 pulledInfobox.forEach((info) => {
   if (info.childElementCount == 2) {
     var exclude = ["Based on"];
-    var key = info.children[0].innerText;
+    var key = info.children[0].innerText.replace(/\(([a-z ]){1,}\)/gi, "").replace(/\s/g, " ");
     var value = info.children[1].innerText.replace(/\[\d{1,3}\]/gi, "");
     media.infobox[key] = exclude.includes(key) ? value : value.split(/\n/);
   }
 });
 
-//   if (
-//     media.infobox["Based on"].split(/\s/).filter((x) => x.includes("by ")) > 1
-//   ) {
-//     media.infobox["Based on"] = splitBy(media.infobox["Based on"]);
-//   } else {
+// If 'Based on' exists, format it.
 
-//   }
 if (media.infobox.hasOwnProperty("Based on")) {
   if (
     media.infobox["Based on"].split(/\s/).filter((x) => x.includes("by"))
       .length > 1
   ) {
-    console.log("route 1");
     media.infobox["Based on"] = splitBy(media.infobox["Based on"].split(/\n/));
-    console.log(media.infobox["Based on"]);
   } else {
     var [book, author] = media.infobox["Based on"].split("by ");
-    media.infobox["Based on"] = [
+    media.infobox["Based on"] = [[
       book.trim(),
       chain(author.trim().split(/\n/)),
-    ].join(" by ");
-    console.log(media.infobox["Based on"]);
+    ].join(" by ")];
   }
 }
+console.log(media);
+console.log(media.infobox)
 
 //
-var obj = {};
+// var obj = {};
 
-rows.forEach((x) => {
-  var temp = x.children[1].innerText;
-  if (temp.includes("[")) {
-    temp = `${temp.slice(0, temp.indexOf("["))}`;
-  }
-  obj[x.children[0].textContent] = temp;
-});
+// rows.forEach((x) => {
+//   var temp = x.children[1].innerText;
+//   if (temp.includes("[")) {
+//     temp = `${temp.slice(0, temp.indexOf("["))}`;
+//   }
+//   obj[x.children[0].textContent] = temp;
+// });
 
 var list = [];
 
-for (key in obj) {
-  var answer = obj[key].trim().split(/\n/gi);
-  // if (key === "Release date") {
-  //   if (answer.length === 1){
-  //     answer = answer[0]
-  //   } else {
-  //     answer = answer.slice(answer.length-1, answer.length);
-  //   }
-  // }
-  console.log(answer);
-  switch (key) {
-    case "Directed by":
-      list.push(
-        `Who directed ${the}${title}?\t${
-          the.charAt(0).toUpperCase() + the.slice(1)
-        }${title} was directed by ${chain(answer)}.\t${source}`
-      );
-      break;
-    case "Produced by":
-      list.push(
-        `Who produced ${the}${title}?\t${
-          the.charAt(0).toUpperCase() + the.slice(1)
-        }${title} was produced by ${chain(answer)}.\t${source}`
-      );
-      break;
-    case "Written by":
-      list.push(
-        `Who wrote ${the}${title}?\t${
-          the.charAt(0).toUpperCase() + the.slice(1)
-        }${title} was written by ${chain(answer)}.\t${source}`
-      );
-      break;
-    case "Starring":
-      list.push(
-        `Who starred ${the}${title}?\t${
-          the.charAt(0).toUpperCase() + the.slice(1)
-        }${title} stars by ${chain(answer)}.\t${source}`
-      );
-      break;
-    case "Music by":
-      list.push(
-        `Who was the music for ${the}${title} by?\t${
-          the.charAt(0).toUpperCase() + the.slice(1)
-        }${title} was produced by ${chain(answer)}.\t${source}`
-      );
-      break;
-    case "Cinematography":
-      list.push(
-        `Who the cinematographer for ${the}${title}?\tThe cinematographer for ${the}${title} was ${chain(
-          answer
-        )}.\t${source}`
-      );
-      break;
-    case "Edited by":
-      list.push(
-        `Who edited ${the}${title}?\t${
-          the.charAt(0).toUpperCase() + the.slice(1)
-        }${title} was edited by ${chain(answer)}.\t${source}`
-      );
-      break;
-    case "Production companies":
-      list.push(
-        `What company produced ${the}${title}?\t${
-          the.charAt(0).toUpperCase() + the.slice(1)
-        }${title} was produced by ${chain(answer)}.\t${source}`
-      );
-      break;
-    case "Distributed by":
-      list.push(
-        `Who distributed ${the}${title}?\t${
-          the.charAt(0).toUpperCase() + the.slice(1)
-        }${title} was distributed by ${chain(answer)}.\t${source}`
-      );
-      break;
-    case "Release date":
-      list.push(
-        `When was ${the}${title} released?\t${
-          the.charAt(0).toUpperCase() + the.slice(1)
-        }${title} was released on ${chain(answer)}.\t${source}`
-      );
-      break;
-    case "Running time":
-      list.push(
-        `What is the running time of ${the}${title}?\tThe running time for ${the}${title} is ${chain(
-          answer
-        )}.\t${source}`
-      );
-      break;
-    case "Country":
-      list.push(
-        `What country is ${the}${title} from?\tThe country of ${the}${title} is ${chain(
-          answer
-        )}.\t${source}`
-      );
-      break;
-    case "Language":
-      list.push(
-        `What language is ${the}${title} in?\tThe language of ${the}${title} is ${chain(
-          answer
-        )}.\t${source}`
-      );
-      break;
-    case "Budget":
-      list.push(
-        `What was the budget of ${the}${title}?\t${
-          the.charAt(0).toUpperCase() + the.slice(1)
-        }${title} had a production budget of ${chain(answer)}.\t${source}`
-      );
-      break;
-    case "Box office":
-      list.push(
-        `How did ${the}${title} do at the box office?\t${
-          the.charAt(0).toUpperCase() + the.slice(1)
-        }${title} earned ${chain(answer)} at the box office.\t${source}`
-      );
-      break;
-  }
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-// console.log(list.join("\n"));
+for (key in media.infobox) {
+  var infobox = media.infobox;
+  var title = media.title.flipped ? `the ${media.title.flipped}` : media.title.normal;
+  var possessive = title[title.length-1] === 's' ? '\'s' : '\'s';
+  var source = media.source;
+  var line = [];
+  switch(key) {
+    case "Based on":
+      line = [`What is ${title} based on?`, `${capitalizeFirstLetter(title)} is based on ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    case "Box office":
+      line = [`How did ${title} do at the box office?`, `${capitalizeFirstLetter(title)} earned ${chain2(infobox[key])} at the box office.`, `${source}`]
+      break;
+    case "Budget":
+      line = [`What the budget of ${title}?`, `The budget of ${capitalizeFirstLetter(title)} is ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    // case "Cantonese":
+      
+    //   break;
+    // case "Chinese":
+      
+    //   break;
+    case "Cinematography":
+      line = [`Who was the cinematography for ${title} by?`, `The cinematography for ${title} was by ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    // case "Composer":
+      
+    //   break;
+    case "Country":
+      line = [`What is the country of ${title}?`, `The country of ${title} is ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    case "Country of origin":
+      line = [`What is ${title}${possessive}?`, `${capitalizeFirstLetter(title)}${possessive} country of origin is ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    case "Created by":
+      line = [`Who was ${title} created by?`, `${capitalizeFirstLetter(title)} was created by ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    case "Directed by":
+      line = [`Who directed ${title}?`, `${capitalizeFirstLetter(title)} was directed by ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    case "Distributed by":
+      line = [`Who distributed ${title}?`, `${capitalizeFirstLetter(title)} was distributed by ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    case "Distributor":
+      line = [`Who the distributor for ${title}?`, `The distributor for${title} is  ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    case "Edited by":
+      line = [`Who edited ${title}?`, `${capitalizeFirstLetter(title)} was edited by ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    case "Editor":
+      line = [`Who was the editor for ${title}?`, `The editor for ${title} was ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    // case "English network":
+      
+    //   break;
+    // case "Episodes":
+      
+    //   break;
+    // case "Executive producer":
+      
+    //   break;
+    case "Genre":
+      line = [`What is the genre of ${title}?`, `The genre of ${title} is ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    case "Language":
+      line = [`What is the language of ${title}?`, `The language of ${title} is ${chain2(infobox[key])}.`, `${source}`]
+
+      break;
+    // case "Licensed by":
+      
+    //   break;
+    case "Music by":
+      line = [`Who was the music for ${title} by?`, `The music for ${title} was by ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    // case "No. of episodes":
+      
+    //   break;
+    // case "No. of seasons":
+      
+    //   break;
+    // case "Opening theme":
+      
+    //   break;
+    case "Original language":
+      line = [`What was ${title}${possessive} original language?`, `${title}${possessive} original language was ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    // case "Original network":
+      
+    //   break;
+    case "Original release":
+      line = [`Who was ${title}${possessive} original release?`, `${capitalizeFirstLetter(title)}${possessive} original release was ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    // case "Original run":
+      
+    //   break;
+    // case "Preceded by":
+      
+    //   break;
+    case "Produced by":
+      line = [`Who produced ${title}?`, `${capitalizeFirstLetter(title)} was produced by ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    case "Producer":
+      line = [`Who was the produce for ${title}?`, `The produce for ${capitalizeFirstLetter(title)} was ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    // case "Production companies":
+    //   list.push(
+    //     `What company produced ${the}${title}?\t${
+    //       the.charAt(0).toUpperCase() + the.slice(1)
+    //     }${title} was produced by ${chain(answer)}.\t${source}`
+    //   );
+    //   break;
+    case "Production company":
+      line = [`What company produced ${title}?`, `${capitalizeFirstLetter(title)} was produced by ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    // case "Production location":
+      
+    //   break;
+    // case "Related shows":
+      
+    //   break;
+    case "Release date":
+      line = [`When was ${title} released?`, `${capitalizeFirstLetter(title)} was released on ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    case "Running time":
+      line = [`What is the running time of ${title}?`, `The running time of ${title} is ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    // case "Screenplay by":
+      
+    //   break;
+    case "Starring":
+      line = [`Who starred in ${title}?`, `${capitalizeFirstLetter(title)} stars ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    // case "Studio":
+      
+    //   break;
+    case "Written by":
+      line = [`Who wrote ${title}?`, `${capitalizeFirstLetter(title)} was written by ${chain2(infobox[key])}.`, `${source}`]
+      break;
+    default:
+      console.log(`Error:\t${key} is unaccounted for.\tSend help!`)
+  }
+  list.push(line.join("\t"))
+}
+
+function shuffleArray(array) {
+  for(let i = array.length-1; i > 0; i--) {
+    var j = Math.floor(Math.random() * i)
+    var temp = array[i]
+    array[i] = array[j]
+    array[j] = temp
+  }
+  return array;
+}
+
+console.log(list)
+console.log(shuffleArray(list).join("\n"));
 
 // Points of interest
 
@@ -347,3 +395,5 @@ console.log(
     .filter((x) => x.split(" ").length < 30)
     .map((x) => x.replace(/\[\d{1,2}\]/gi, ""))
 );
+
+
