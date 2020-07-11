@@ -26,6 +26,7 @@ var third = document.querySelector('div.ratings_wrapper').innerText.split(/\s/).
 var [rating, users] = third;
 rows = rows.concat([`IMDb users have given a weighted average vote of ${rating.replace("/", " / ")} for $title`])
 
+// MPAA Rating
 var fourth = document.querySelector('#titleStoryLine > h2');
 var sBlock = [];
 el = fourth;
@@ -36,5 +37,29 @@ while (el !== null) {
 sBlock = sBlock.map(x => x.innerText);
 sBlock = sBlock.filter(x => x && x.includes('MPAA'))[0].split(' | ')[0].replace(/\n/, ': ');
 rows = rows.concat(sBlock)
+
+// Capture Country, Language, Release Date, AKA, Filming Locations, Budget, Opening Weekend, Gross, Cumulative Worldwide Gross, Production Co, Runtime, Sound Mix, Color, Aspect Ratio
+var fifth = document.querySelector('#titleDetails > h2');
+var dBlock = [];
+el = fifth;
+while(el !== null) {
+  dBlock.push(el);
+  el = el.nextElementSibling;
+}
+dBlock = dBlock.map(x => x.innerText);
+dBlock = dBlock.filter(x => {
+  var exclude = [
+    "Details",
+    "Edit",
+    "Box Office", 
+    "Company Credits",
+    "Technical Specs",
+    "full technical specs",
+  ]
+  return x && !x.includes('Official Sites:') && !x.includes('more on IMDbPro') && !exclude.includes(x);
+}).map(x => x.replace(/(:\s{0,})/g, ": ").split("See more")[0].trim())
+console.log(dBlock)
+
+rows = rows.concat(dBlock);
 
 console.log(rows);
