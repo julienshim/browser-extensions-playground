@@ -1,5 +1,7 @@
 // console.log(`What was the IDMB users rating for ${title}\t${userRating[1]} IMDB users have given a weighted average vote of ${userRating[0].split("/").join(" / ")} for ${title}\t${ratingUrl}`);
 
+clear()
+
 var imdbGenres = [
   "Action",
   "Animation",
@@ -65,6 +67,7 @@ capturedData.forEach((data, i) => {
   var format = {
     RuntimeHM: `RuntimeHM: ${data}:`,
     "Release Date": `Release Date: ${data}`,
+    Type: `Type: ${data}`
   };
   var temp;
   if (i === 0) {
@@ -122,8 +125,12 @@ capturedData.forEach((data, i) => {
       }
     })
     temp = format["Genre"];
-  } else if (data.includes("(")) {
+  } else if (!!data.match(/\([a-z]{2,}\)/i)) {
     temp = format["Release Date"];
+    var year = `${temp.match(/\d{4}/)[0]}`
+    imdb['Type'] = [`Film (${year})`]
+  } else if (data.includes('Series')) {
+    temp = format['Type'];
   }
   if (temp) { var [key, value] = temp.split(/:\s{0,}/) }
   if (key && value) { imdb[key] = [value]}
