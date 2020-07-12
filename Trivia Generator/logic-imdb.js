@@ -96,9 +96,14 @@ capturedData.forEach((data, i) => {
     Type: `Type: ${data}`
   };
   var temp;
+
   if (i === 0) {
     if(!!data.match(/\s{2,}TV-/)) {
       imdb['Title'] = [data.split(/\s{2,}TV-/)[0]]
+    }
+    if(imdbGenres.includes(data.split(/\s{2,}/)[1])){
+      imdb['Title'] = [data.split(/\s{2,}/)[0]]
+      imdb['Genre'] = [data.split(/\s{2,}/)[1]]
     }
     if(!!data.match(/\(original title\)/)) {
       if(!!data.match(/\d{1,}h/) || !!data.match(/\d{1,}min/)) {
@@ -261,9 +266,22 @@ capturedData.forEach((data, i) => {
 capturedData = window.location.href.match(/https:\/\/www.imdb.com\/title\/tt+\d{1,}/)[0];
 imdb['URL'] = [capturedData];
 
-// console.log(imdb)
-
 for (key in imdb) {
+  
+  function chain(array) {
+    var length = array.length;
+    if (length === 0) {
+      return "";
+    } else if (length === 1) {
+      return `${array[0]}`;
+    } else if (length === 2) {
+      return `${array[0]} and ${array[1]}`;
+    } else {
+      return `${array.splice(0, array.length - 1).join(", ")}, and ${
+        array[array.length - 1]
+      }`;
+    }
+  }
 
   function formatTitle(title, type) {
     var temp = title
@@ -274,19 +292,21 @@ for (key in imdb) {
     return ["the", year, type, title].join(" ");
   }
 
-  var questions, question, answers, source;
-  var title = imdb['Title'][0];
-  var source = imdb['URL'][0];
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  var questions = undefined; 
+  var question = undefined;
+  var answers = undefined;
+  var source = chain(imdb['URL']);
+  var title = chain(imdb['Title']);
   var fullType = imdb.hasOwnProperty('Type') ? imdb['Type'] : [`Film ${title.match(/\(\d{4}- \)|\(\d{4}\)|\(\d{4}–\d{4}\)/)[0]}`];
-  var type = fullType[0].split(' ')[0].replace('TV', 'Television').toLowerCase();
+  var type = chain(fullType).split(' ')[0].replace('TV', 'Television').toLowerCase();
   var possessive = type[type.length-1] === 's' ? "'" : "'s";
   var possessiveTitle = title.split(' (')[0][title.split(' (')[0].length-1] === 's' ?  "'" : "'s";
-  var isInProduction = !!fullType[0].match(/\(\d{4}–\s\)/) && !fullType[0].includes('Mini');
+  var isInProduction = !!chain(fullType).match(/\(\d{4}–\s\)/) && !fullType[0].includes('Mini');
   var fullTitle = formatTitle(title, type);
-
-  // console.log(title, fullType, type, possessive)
-
-
 
   switch(key) {
     case "Also Known As":
@@ -294,16 +314,13 @@ for (key in imdb) {
     case "Aspect Ratio":
       break;
     case "Budget":
+      var budget = chain(imdb.Budget).includes('estimated') ? `an estimated ${chain(imdb.Budget).split(" (")[0].replace(/EUR/, '€')}`: chain(imdb.Budget).replace(/EUR/, '€')
       questions = {
-        P: "What is its budget?",
-        E: `What is the ${type}${possessive} budget?`
+        p: "What is its budget?",
+        e: `What is the ${type}${possessive} budget?`
       }
-      question = `What is ${fullTitle}${possessiveTitle}?`
-      answer = `The budget of ${fullTitle} is ${imdb.Budget[0]}`
-      // answers = `The budget of ${}`
-      // What's the film/tv series' budget?
-      // The budget for ${title} is
-      console.log(questions.p, question, answer, source);
+      question = `What is ${fullTitle}${possessiveTitle} budget?`
+      answer = `The budget of ${fullTitle} is ${budget}.`
       break;
     case "Color":
       break;
@@ -312,6 +329,13 @@ for (key in imdb) {
     case "Creators":
       break;
     case "Cumulative Worldwide Gross":
+      var gross = imdb['Cumulative Worldwide Gross'];
+      questions = {
+        p: "How much did it gross worldwide?",
+        e: `How much did the ${type} gross worldwide?`
+      }
+      question = `How much did ${fullTitle} gross worldwide?`
+      answer = `${capitalizeFirstLetter(fullTitle)} grossed ${gross} worldwide.`
       // How much did it gross worldwide?
       // How much did the film/tv series gross worldwide?
       // Film/tv has a cumulative world wide gross of ...
@@ -391,6 +415,11 @@ for (key in imdb) {
     default:
       console.error(`${key} has not been accounted for in this version.`)
   }
-  // console.log(questions, answer, source)
+  if (questions, question, answer, source) {
+    for(key in questions) {
+      console.log(questions[key], question, answer, source);
+    }
+  }
+
 }
 
