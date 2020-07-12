@@ -2,6 +2,32 @@
 
 clear()
 
+var countryConverstion = {
+  "USA": "United States",
+  "UK": "United Kingdom"
+}
+
+var pluralCountries = {
+  "United States": true,
+  "France": false,
+  "China": false,
+  "India": false,
+  "United Kingdom": true,
+  "Poland": false,
+  "Nigeria": false,
+  "Egypt": false,
+  "Iran": false,
+  "Japan": false,
+  "South Korea": false,
+  "Hong Kong": false,
+  "Turkey": false,
+  "Pakistan": false,
+  "Bangladesh": false,
+  "Indonesia": false,
+  "Trinidad and Tobago": false,
+  "Nepal": false
+}
+
 var imdbGenres = [
   "Action",
   "Animation",
@@ -65,12 +91,15 @@ capturedData = document
   .innerText.split(" | ");
 capturedData.forEach((data, i) => {
   var format = {
-    RuntimeHM: `RuntimeHM: ${data}:`,
+    RuntimeHM: `RuntimeHM: ${data.replace('h', +(data[0]) > 1 ? " hours" : " hour").replace('min', ' minutes')}:`,
     "Release Date": `Release Date: ${data}`,
     Type: `Type: ${data}`
   };
   var temp;
   if (i === 0) {
+    if(!!data.match(/\s{2,}TV-/)) {
+      imdb['Title'] = [data.split(/\s{2,}TV-/)[0]]
+    }
     if(!!data.match(/\(original title\)/)) {
       if(!!data.match(/\d{1,}h/) || !!data.match(/\d{1,}min/)) {
         var [title, originalTitle, RuntimeHM] = data.split(/\n/);
@@ -137,13 +166,15 @@ capturedData.forEach((data, i) => {
 });
 
 // IMDb User Rating
-capturedData = document.querySelector("div.ratings_wrapper").innerText.split(/\n/).slice(0,2);
-var [rating, users] = capturedData;
-if (rating && users) {
-  imdb['Rating'] = {
-    "Average Rating": rating.replace("/", " / "),
-    "No. of Users": users
+capturedData = document.querySelector("div.ratings_wrapper") && document.querySelector("div.ratings_wrapper").innerText.split(/\n/).slice(0,2);
+if (capturedData) {
+  var [rating, users] = capturedData;
+  if (rating && users) {
+    imdb['Rating'] = {
+      "Average Rating": rating.replace("/", " / "),
+      "No. of Users": users
   }
+}
 }
 
 // MPAA Rating, Expanded Genre, and Storyline
@@ -198,6 +229,9 @@ capturedData.forEach((data, i) => {
     if(data.includes('Aspect Ratio')) {
       var [key, value] = ["Aspect Ratio", data.split('Aspect Ratio: ')[1]]
       imdb[key] = [value]
+    } else if (data.includes('Sound Mix:')) {
+      var [key, value] = ["Sound Mix", data.split('Sound Mix: ')[1].split(' | ')]
+      imdb[key] = value
     } else {
       var [key, value] = data.split(/:\s{0,}/)
       value = [value.split(/ See full summary| See more/)[0]];
@@ -211,6 +245,10 @@ capturedData.forEach((data, i) => {
           "Opening Weekend USA Date": date
         }
       }
+      if (key.includes('Runtime')) {
+        key = 'RuntimeM';
+        value[0] = value[0].replace('min', "minutes")
+      }
       imdb[key] = value
     }
   }
@@ -220,9 +258,139 @@ capturedData.forEach((data, i) => {
 
 
 //Capture Source
-
 capturedData = window.location.href.match(/https:\/\/www.imdb.com\/title\/tt+\d{1,}/)[0];
 imdb['URL'] = [capturedData];
 
+// console.log(imdb)
 
-console.log(imdb);
+for (key in imdb) {
+
+  function formatTitle(title, type) {
+    var temp = title
+        .replace(/[())]/g, " ")
+        .trim()
+        .split(/[\s]{2,}/);
+    var [title, year] = temp;
+    return ["the", year, type, title].join(" ");
+  }
+
+  var questions, question, answers, source;
+  var title = imdb['Title'][0];
+  var source = imdb['URL'][0];
+  var fullType = imdb.hasOwnProperty('Type') ? imdb['Type'] : [`Film ${title.match(/\(\d{4}- \)|\(\d{4}\)|\(\d{4}–\d{4}\)/)[0]}`];
+  var type = fullType[0].split(' ')[0].replace('TV', 'Television').toLowerCase();
+  var possessive = type[type.length-1] === 's' ? "'" : "'s";
+  var possessiveTitle = title.split(' (')[0][title.split(' (')[0].length-1] === 's' ?  "'" : "'s";
+  var isInProduction = !!fullType[0].match(/\(\d{4}–\s\)/) && !fullType[0].includes('Mini');
+  var fullTitle = formatTitle(title, type);
+
+  // console.log(title, fullType, type, possessive)
+
+
+
+  switch(key) {
+    case "Also Known As":
+      break;
+    case "Aspect Ratio":
+      break;
+    case "Budget":
+      questions = {
+        P: "What is its budget?",
+        E: `What is the ${type}${possessive} budget?`
+      }
+      question = `What is ${fullTitle}${possessiveTitle}?`
+      answer = `The budget of ${fullTitle} is ${imdb.Budget[0]}`
+      // answers = `The budget of ${}`
+      // What's the film/tv series' budget?
+      // The budget for ${title} is
+      console.log(questions.p, question, answer, source);
+      break;
+    case "Color":
+      break;
+    case "Country":
+      break;
+    case "Creators":
+      break;
+    case "Cumulative Worldwide Gross":
+      // How much did it gross worldwide?
+      // How much did the film/tv series gross worldwide?
+      // Film/tv has a cumulative world wide gross of ...
+      break;
+    case "Director":
+      // Who stars/starred in it?
+      // Who stars/starred in the film/tv series?
+      // ${title} was directed by
+      break;
+    case "Directors":
+      // Who stars/starred in it?
+      // Who stars/starred in the film/tv series?
+      // ${title} was directed by
+      break;
+    case "Filming Locations":
+      break;
+    case "Genre":
+      break;
+    case "Gross USA":
+      break;
+    case "Language":
+      break;
+    case "Motion Picture Rating (MPAA)":
+      break;
+    case "Opening Weekend USA":
+      break;
+    case "Original Title":
+      break;
+    case "Plot":
+      // What is its plot?
+      // What is the film/tv series' plot?
+      // Plot
+      break;
+    case "Production Co":
+      break;
+    case "Rating":
+      // What is its IMDb User rating?
+      // What the IMDB User RAting for 
+      // 2,685 IMDb users have given a weighted average vote of 6.4 / 10
+      break;
+    case "Release Date":
+      // When was it released?
+      // When was the tv/film released?
+      // TV/film was released on (date) in (country)
+      break;
+    case "RuntimeM":
+      // What is its runtime?
+      // What is the film/tv show's runtime?
+      // The runtime of blah is blah.
+      break;
+    case "RuntimeHM":
+      break;
+    case "Sound Mix":
+      break;
+    case "Stars":
+      // Who stars/starred in it?
+      // Who stars/starred in the film/tv series?
+      // ${title} was directed by
+      break;
+    case "Storyline":
+      break;
+    case "Title":
+      break;
+    case "Type":
+      break;
+      // Default element
+    case "URL":
+      // Default element
+      break;
+    case "Writer":
+      break;
+    case "Writers":
+      // Who wrote it?
+      // Who was the film tv series written by?
+      // Film tv series was written by 
+      break;
+    default:
+      console.error(`${key} has not been accounted for in this version.`)
+  }
+  // console.log(questions, answer, source)
+}
+
