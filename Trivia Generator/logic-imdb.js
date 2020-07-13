@@ -439,7 +439,7 @@ for (key in imdb) {
         e: `What is the ${type}${possessive} IMDb User Rating?`
       };
       question = `What is ${fullTitle}${possessiveTitle} IMDb User Rating?`;
-      answer = `${chain(imdb['Rating']['No. of Users'])} IMDB users have given a weighted average vote of ${chain(imdb['Rating']['Average Rating'])}.`;
+      answer = `${chain(imdb['Rating']['No. of Users'])} IMDb users have given a weighted average vote of ${chain(imdb['Rating']['Average Rating'])} for ${fullTitle}.`;
       break;
     case "Release Date":
       var ftCheckQ = imdb['Release Date'][0].includes('2021') ? 'was' : 'was';
