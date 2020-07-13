@@ -285,7 +285,7 @@ for (key in media.infobox) {
       line = [`What is the country of ${title}?`, `The country of ${title} is ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     case "Country of origin":
-      line = [`What is ${title}${possessive}?`, `${capitalizeFirstLetter(title)}${possessive} country of origin is ${chainAnswer(infobox[key])}.`, `${source}`]
+      line = [`What is ${title}${possessive} country of origin?`, `${capitalizeFirstLetter(title)}${possessive} country of origin is ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     case "Created by":
       line = [`Who ${tense('is')} ${title} created by?`, `${capitalizeFirstLetter(title)} ${tense('is')} created by ${chainAnswer(infobox[key])}.`, `${source}`]
@@ -312,7 +312,7 @@ for (key in media.infobox) {
       
     //   break;
     case "Executive producer":
-      line = [`Who ${tense('is')} the executive producer for ${title} by?`, `The executive producer for ${title} ${tense('is')} by ${chainAnswer(infobox[key])}.`, `${source}`]
+      line = [`Who ${tense('is')} the executive producer for ${title}?`, `The executive producer for ${title} ${tense('is')} by ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     case "Genre":
       line = [`What is the genre of ${title}?`, `The genre of ${title} is ${chainAnswer(infobox[key])}.`, `${source}`]
@@ -343,7 +343,7 @@ for (key in media.infobox) {
       line = [`What network was ${title} originally on?`, `${title}${possessive} was originally on ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     case "Original release":
-      line = [`When was ${title}${possessive} originally release?`, `${capitalizeFirstLetter(title)} was originally released ${isPresent ? infobox[key].join(" ").replace("–", "to the") : infobox[key].join(" ").replace("–", "to")}.`, `${source}`]
+      line = [`When was ${title}${possessive} original release?`, `${capitalizeFirstLetter(title)} was originally released ${isPresent ? infobox[key].join(" ").replace("–", "to the") : infobox[key].join(" ").replace("–", "to")}.`, `${source}`]
       break;
     // case "Original run":
       
