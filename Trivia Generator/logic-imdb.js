@@ -294,6 +294,9 @@ capturedData = window.location.href.match(
 )[0];
 imdb["URL"] = [capturedData];
 
+// Questions container
+var lines = [];
+
 for (key in imdb) {
   function chain(array) {
     var length = array.length;
@@ -439,32 +442,35 @@ for (key in imdb) {
       answer = `${chain(imdb['Rating']['No. of Users'])} IMDB users have given a weighted average vote of ${chain(imdb['Rating']['Average Rating'])}`;
       break;
     case "Release Date":
-      var ftCheckQ = imdb['Release Date'][0].includes('2021') ? 'was' : tense('is');
-      var ftCheckA = imdb['Release Date'][0].includes('2021') ? 'will be' : tense('is');
+      var ftCheckQ = imdb['Release Date'][0].includes('2021') ? 'was' : 'was';
+      var ftCheckA = imdb['Release Date'][0].includes('2021') ? 'will be' : 'was';
       var formatReleaseDate = 
       questions = {
         p: `When ${ftCheckQ} its release date?`,
         e: `When ${ftCheckQ} ${type}${possessive} release date?`
       };
       question = `What is ${fullTitle}${possessiveTitle} release date?`;
-      answer = `${capitalizeFirstLetter(fullTitle)} ${ftCheckA} released ${imdb['Release Date']}`;
-      // When was it released?
-      // When was the tv/film released?
-      // TV/film was released on (date) in (country)
+      answer = `${capitalizeFirstLetter(fullTitle)} ${ftCheckA} released ${imdb['Release Date']}.`;
       break;
     case "RuntimeM":
-      // What is its runtime?
-      // What is the film/tv show's runtime?
-      // The runtime of blah is blah.
       break;
     case "RuntimeHM":
+      questions = {
+        p: `What is its runtime?`,
+        e: `What is the ${type}${possessive} runtime?`
+      };
+      question = `What is ${fullTitle}${possessiveTitle} runtime?`;
+      answer = `${capitalizeFirstLetter(fullTitle)}${possessiveTitle} runtime is ${chain(imdb['RuntimeHM'])}.`;
       break;
     case "Sound Mix":
       break;
     case "Stars":
-      // Who stars/starred in it?
-      // Who stars/starred in the film/tv series?
-      // ${title} was directed by
+      questions = {
+        p: `Who stars in it?`,
+        e: `Who stars in the ${type}${possessive}?`
+      };
+      question = `Who stars in ${fullTitle}?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} stars ${chain(imdb['Stars'])}.`;
       break;
     case "Storyline":
       break;
@@ -472,16 +478,25 @@ for (key in imdb) {
       break;
     case "Type":
       break;
-    // Default element
+      // Default element
     case "URL":
       // Default element
       break;
     case "Writer":
+      questions = {
+        p: `Who wrote it?`,
+        e: `Who wrote the ${type}${possessive}?`
+      };
+      question = `Who wrote ${fullTitle}?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} written by ${chain(imdb['Stars'])}.`;
       break;
     case "Writers":
-      // Who wrote it?
-      // Who was the film tv series written by?
-      // Film tv series was written by
+      questions = {
+        p: `Who wrote it?`,
+        e: `Who wrote the ${type}${possessive}?`
+      };
+      question = `Who wrote ${fullTitle}?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} written by ${chain(imdb['Stars'])}.`;
       break;
     default:
       console.error(`${key} has not been accounted for in this version.`);
@@ -489,7 +504,19 @@ for (key in imdb) {
 
   if (questions && question && answer && source) {
     for (key in questions) {
-      console.log(questions[key], question, answer, source);
+      lines.push([questions[key], question, answer, source].join("\t"));
     }
   }
 }
+
+function shuffleArray(array) {
+  for(let i = array.length-1; i > 0; i--) {
+    var j = Math.floor(Math.random() * i)
+    var temp = array[i]
+    array[i] = array[j]
+    array[j] = temp
+  }
+  return array;
+}
+
+console.log(shuffleArray(lines).join("\n"));
