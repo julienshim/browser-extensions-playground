@@ -1,3 +1,5 @@
+clear()
+
 // Data
 
 var media = {
@@ -74,6 +76,7 @@ media.type = revealMediaType(introParagraph);
 
 function formatTitle(t) {
   var temp;
+  // QUICK FIX NEEDS EDITING.
   if (t.includes("TV")) {
     temp = t.replace("TV", "television");
     media.title.normal = temp;
@@ -82,13 +85,14 @@ function formatTitle(t) {
   }
   if (t.includes("(")) {
     temp = t
+      .replace("TV", "television")
       .replace(/[())]/g, " ")
       .trim()
       .split(/[\s]{2,}/);
     var [head, tail] = temp;
     media.title.flipped = [tail, head].join(" ");
   }
-  media.title.stripped = t.replace(/[()]/g, "");
+  media.title.stripped = t.replace("TV", "television").replace(/[()]/g, "");
 }
 
 formatTitle(document.querySelector("#firstHeading").textContent);
@@ -208,7 +212,7 @@ console.log(media.infobox)
 //   obj[x.children[0].textContent] = temp;
 // });
 
-var list = [];
+var lines = [];
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -219,9 +223,11 @@ for (key in media.infobox) {
   var title = media.title.flipped ? `the ${media.title.flipped}` : media.title.normal;
   var possessive = title[title.length-1] === 's' ? '\'s' : '\'s';
   var source = media.source;
+  var questions = undefined;
+  var question = undefined;
+  var answer = undefined;
   var line = [];
   var isPresent;
-  var tense = isPresent ? "is" : "was";
 
   function presenceCheck(keyToCheck) {
     return infobox[keyToCheck].join(" " ).toLowerCase(). includes('present');
@@ -242,21 +248,26 @@ for (key in media.infobox) {
   }
   
   
-  
   infobox[key].join(" ").toLowerCase().includes('present') && media.type !== 'film';
-  var tense = isPresent ? "is" : "was";
 
-  console.log('Posessive:', possessive, "Tense:", tense);
+  function tense(string) {
+    var past = {
+      "is": "was",
+      "stars": "starred",
+      "directs": 'directed'
+    };
+    return isPresent ? string : past[string];
+  }
 
   switch(key) {
     case "Based on":
-      line = [`What ${tense} ${title} based on?`, `${capitalizeFirstLetter(title)} ${tense} based on ${chainAnswer(infobox[key])}.`, `${source}`]
+      line = [`What ${tense('is')} ${title} based on?`, `${capitalizeFirstLetter(title)} ${tense('is')} based on ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     case "Box office":
       line = [`How did ${title} do at the box office?`, `${capitalizeFirstLetter(title)} earned ${chainAnswer(infobox[key])} at the box office.`, `${source}`]
       break;
     case "Budget":
-      line = [`What ${tense} the budget of ${title}?`, `The budget of ${title} ${tense} ${chainAnswer(infobox[key])}.`, `${source}`]
+      line = [`What ${tense('is')} the budget of ${title}?`, `The budget of ${title} ${tense('is')} ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     // case "Cantonese":
       
@@ -265,10 +276,10 @@ for (key in media.infobox) {
       
     //   break;
     case "Cinematography":
-      line = [`Who ${tense} the cinematography for ${title} by?`, `The cinematography for ${title} ${tense} by ${chainAnswer(infobox[key])}.`, `${source}`]
+      line = [`Who ${tense('is')} the cinematography for ${title} by?`, `The cinematography for ${title} ${tense('is')} by ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     case "Composer":
-      line = [`Who${tense}the composer for ${title} by?`, `The composer for ${title} ${tense} ${chainAnswer(infobox[key])}.`, `${source}`]
+      line = [`Who${tense('is')}the composer for ${title} by?`, `The composer for ${title} ${tense('is')} ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     case "Country":
       line = [`What is the country of ${title}?`, `The country of ${title} is ${chainAnswer(infobox[key])}.`, `${source}`]
@@ -277,22 +288,22 @@ for (key in media.infobox) {
       line = [`What is ${title}${possessive}?`, `${capitalizeFirstLetter(title)}${possessive} country of origin is ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     case "Created by":
-      line = [`Who ${tense} ${title} created by?`, `${capitalizeFirstLetter(title)} ${tense} created by ${chainAnswer(infobox[key])}.`, `${source}`]
+      line = [`Who ${tense('is')} ${title} created by?`, `${capitalizeFirstLetter(title)} ${tense('is')} created by ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     case "Directed by":
-      line = [`Who directed ${title}?`, `${capitalizeFirstLetter(title)} ${tense} directed by ${chainAnswer(infobox[key])}.`, `${source}`]
+      line = [`Who directed ${title}?`, `${capitalizeFirstLetter(title)} ${tense('is')} directed by ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     case "Distributed by":
-      line = [`Who distributed ${title}?`, `${capitalizeFirstLetter(title)} ${tense} distributed by ${chainAnswer(infobox[key])}.`, `${source}`]
+      line = [`Who distributed ${title}?`, `${capitalizeFirstLetter(title)} ${tense('is')} distributed by ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     case "Distributor":
-      line = [`Who is the distributor for ${title}?`, `The distributor for${title} is  ${chainAnswer(infobox[key])}.`, `${source}`]
+      line = [`Who is the distributor for ${title}?`, `The distributor for${title} is ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     case "Edited by":
-      line = [`Who edited ${title}?`, `${capitalizeFirstLetter(title)} ${tense} edited by ${chainAnswer(infobox[key])}.`, `${source}`]
+      line = [`Who edited ${title}?`, `${capitalizeFirstLetter(title)} ${tense('is')} edited by ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     case "Editor":
-      line = [`Who ${tense} the editor for ${title}?`, `The editor for ${title} ${tense} ${chainAnswer(infobox[key])}.`, `${source}`]
+      line = [`Who ${tense('is')} the editor for ${title}?`, `The editor for ${title} ${tense('is')} ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     // case "English network":
       
@@ -301,7 +312,7 @@ for (key in media.infobox) {
       
     //   break;
     case "Executive producer":
-      line = [`Who ${tense} the executive producer for ${title} by?`, `The executive producer for ${title} ${tense} by ${chainAnswer(infobox[key])}.`, `${source}`]
+      line = [`Who ${tense('is')} the executive producer for ${title} by?`, `The executive producer for ${title} ${tense('is')} by ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     case "Genre":
       line = [`What is the genre of ${title}?`, `The genre of ${title} is ${chainAnswer(infobox[key])}.`, `${source}`]
@@ -314,7 +325,7 @@ for (key in media.infobox) {
       
     //   break;
     case "Music by":
-      line = [`Who ${tense} the music for ${title} by?`, `The music for ${title} ${tense} by ${chainAnswer(infobox[key])}.`, `${source}`]
+      line = [`Who ${tense('is')} the music for ${title} by?`, `The music for ${title} ${tense('is')} by ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     case "No. of episodes":
       line = [`How many episodes does ${title} have?`, `The number of episodes for ${title} is ${chainAnswer(infobox[key])}.`, `${source}`]
@@ -341,23 +352,23 @@ for (key in media.infobox) {
       line = [`What series was ${title} preceded by?`, `${capitalizeFirstLetter(title)}${possessive} was preceded by ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     case "Produced by":
-      line = [`Who produced ${title}?`, `${capitalizeFirstLetter(title)} ${tense} produced by ${chainAnswer(infobox[key])}.`, `${source}`]
+      line = [`Who produced ${title}?`, `${capitalizeFirstLetter(title)} ${tense('is')} produced by ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     case "Producer":
-      line = [`Who ${tense} the producer for ${title}?`, `The producer for ${capitalizeFirstLetter(title)} ${tense} ${chainAnswer(infobox[key])}.`, `${source}`]
+      line = [`Who ${tense('is')} the producer for ${title}?`, `The producer for ${capitalizeFirstLetter(title)} ${tense('is')} ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     // case "Production companies":
-    //   list.push(
+    //   lines.push(
     //     `What company produced ${the}${title}?\t${
     //       the.charAt(0).toUpperCase() + the.slice(1)
     //     }${title} was produced by ${chainAnswer(answer)}.\t${source}`
     //   );
     //   break;
     case "Production company":
-      line = [`What company produced ${title}?`, `${capitalizeFirstLetter(title)} ${tense} produced by ${chainAnswer(infobox[key])}.`, `${source}`]
+      line = [`What company produced ${title}?`, `${capitalizeFirstLetter(title)} ${tense('is')} produced by ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     case "Production location":
-      line = [`Where ${tense} ${title} produced?`, `${capitalizeFirstLetter(title)} ${tense} produced in ${chainAnswer(infobox[key])}.`, `${source}`]
+      line = [`Where ${tense('is')} ${title} produced?`, `${capitalizeFirstLetter(title)} ${tense('is')} produced in ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     case "Related shows":
       line = [`What is a show that's related to ${title}?`, `${capitalizeFirstLetter(title)} is related to the ${chainAnswer(infobox[key])}.`, `${source}`]
@@ -378,12 +389,12 @@ for (key in media.infobox) {
       
     //   break;
     case "Written by":
-      line = [`Who wrote ${title}?`, `${capitalizeFirstLetter(title)} ${tense} written by ${chainAnswer(infobox[key])}.`, `${source}`]
+      line = [`Who wrote ${title}?`, `${capitalizeFirstLetter(title)} ${tense('is')} written by ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     default:
       console.log(`Error:\t${key} is unaccounted for.\tSend help!`)
   }
-    list.push(line.join("\t"))
+    lines.push(line.join("\t"))
 }
 
 function shuffleArray(array) {
@@ -396,49 +407,49 @@ function shuffleArray(array) {
   return array;
 }
 
-list = list.filter(x => x);
-console.log(list)
-console.log(shuffleArray(list).join("\n"));
+lines = lines.filter(x => x);
+console.log(lines)
+console.log(shuffleArray(lines).join("\n"));
 
 // Points of interest
 
-var raw = [...document.querySelectorAll("p")];
-var interests = [];
-var filinterests = [];
+// var raw = [...document.querySelectorAll("p")];
+// var interests = [];
+// var filinterests = [];
 
-raw.forEach((x) => {
-  // interests = interests.concat(` ${x.textContent}`.match(/\s+[^.]*[.]/gi))
-  interests = interests.concat(` ${x.textContent}`.split(/(?<!\..)[.?!]\s+/gi));
-  // interests = interests.concat(` ${x.textContent}`.replace(/\s[a-z]{1,2}\./, ).replace(/\[\d{1,2}\]/gi, '').replace(/\s{2}/, " ").split(/(?<!\..)[.?!]\s+/gi).map(x=> `${x.trim()}.`).filter(x => x.split(' ').length < 30))
-});
+// raw.forEach((x) => {
+//   // interests = interests.concat(` ${x.textContent}`.match(/\s+[^.]*[.]/gi))
+//   interests = interests.concat(` ${x.textContent}`.split(/(?<!\..)[.?!]\s+/gi));
+//   // interests = interests.concat(` ${x.textContent}`.replace(/\s[a-z]{1,2}\./, ).replace(/\[\d{1,2}\]/gi, '').replace(/\s{2}/, " ").split(/(?<!\..)[.?!]\s+/gi).map(x=> `${x.trim()}.`).filter(x => x.split(' ').length < 30))
+// });
 
-interests = interests.filter((x) => x.trim()).map((x) => `${x.trim()}.`);
+// interests = interests.filter((x) => x.trim()).map((x) => `${x.trim()}.`);
 
-var n = 0;
-var clean = [];
+// var n = 0;
+// var clean = [];
 
-while (n < interests.length) {
-  if (interests[n].match(/\s[a-z]{1,2}\./gi)) {
-    clean.push(`${interests[n]} ${interests[n + 1]}`);
-    n += 2;
-  } else {
-    clean.push(interests[n]);
-    n += 1;
-  }
-}
+// while (n < interests.length) {
+//   if (interests[n].match(/\s[a-z]{1,2}\./gi)) {
+//     clean.push(`${interests[n]} ${interests[n + 1]}`);
+//     n += 2;
+//   } else {
+//     clean.push(interests[n]);
+//     n += 1;
+//   }
+// }
 
-clean.forEach((x) => {
-  media.keyterms.forEach((y) => {
-    if (x.includes(y)) {
-      filinterests.push(x);
-    }
-  });
-});
+// clean.forEach((x) => {
+//   media.keyterms.forEach((y) => {
+//     if (x.includes(y)) {
+//       filinterests.push(x);
+//     }
+//   });
+// });
 
-console.log(
-  [...new Set(filinterests)]
-    .filter((x) => x.split(" ").length < 30)
-    .map((x) => x.replace(/\[\d{1,2}\]/gi, ""))
-);
+// console.log(
+//   [...new Set(filinterests)]
+//     .filter((x) => x.split(" ").length < 30)
+//     .map((x) => x.replace(/\[\d{1,2}\]/gi, ""))
+// );
 
 
