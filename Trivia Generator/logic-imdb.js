@@ -436,7 +436,7 @@ for (key in imdb) {
     case "Rating":
       questions = {
         p: `What is its IMDb User Rating?`,
-        e: `What is ${type}${possessive} IMDb User Rating?`
+        e: `What is the ${type}${possessive} IMDb User Rating?`
       };
       question = `What is ${fullTitle}${possessiveTitle} plot?`;
       answer = `${chain(imdb['Rating']['No. of Users'])} IMDB users have given a weighted average vote of ${chain(imdb['Rating']['Average Rating'])}.`;
