@@ -439,7 +439,7 @@ for (key in imdb) {
         e: `What is ${type}${possessive} IMDb User Rating?`
       };
       question = `What is ${fullTitle}${possessiveTitle} plot?`;
-      answer = `${chain(imdb['Rating']['No. of Users'])} IMDB users have given a weighted average vote of ${chain(imdb['Rating']['Average Rating'])}`;
+      answer = `${chain(imdb['Rating']['No. of Users'])} IMDB users have given a weighted average vote of ${chain(imdb['Rating']['Average Rating'])}.`;
       break;
     case "Release Date":
       var ftCheckQ = imdb['Release Date'][0].includes('2021') ? 'was' : 'was';
@@ -467,7 +467,7 @@ for (key in imdb) {
     case "Stars":
       questions = {
         p: `Who stars in it?`,
-        e: `Who stars in the ${type}${possessive}?`
+        e: `Who stars in the ${type}?`
       };
       question = `Who stars in ${fullTitle}?`;
       answer = `${capitalizeFirstLetter(fullTitle)} stars ${chain(imdb['Stars'])}.`;
