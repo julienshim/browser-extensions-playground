@@ -55,6 +55,7 @@ var imdbGenres = [
   "News",
   "Reality-TV",
   "Talk Show",
+  "Talk-Show",
   "Reality TV",
   "Short",
   "Sports",
@@ -326,6 +327,10 @@ for (key in imdb) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
+  function lowercaseFirstLetter(string) {
+    return string.charAt(0).toLowerCase() + string.slice(1);
+  }
+
   var questions = undefined;
   var question = undefined;
   var answer = undefined;
@@ -369,6 +374,10 @@ for (key in imdb) {
             .split(" (")[0]
             .replace(/EUR/, "€")}`
         : chain(imdb.Budget).replace(/EUR/, "€");
+
+      if (budget.includes('SEK')) {
+        budget = `${budget.replace('SEK', "")} kronor`
+      }
       questions = {
         p: `What ${tense("is")} its budget?`,
         e: `What ${tense("is")} the ${type}${possessive} budget?`
@@ -429,7 +438,7 @@ for (key in imdb) {
         e: `What is the ${type}${possessive} plot?`
       };
       question = `What is ${fullTitle}${possessiveTitle} plot?`;
-      answer = `${chain(imdb['Plot'])}`;
+      answer = `${lowercaseFirstLetter(chain(imdb['Plot']))}`;
       break;
     case "Production Co":
       break;
@@ -485,18 +494,18 @@ for (key in imdb) {
     case "Writer":
       questions = {
         p: `Who wrote it?`,
-        e: `Who wrote the ${type}${possessive}?`
+        e: `Who wrote the ${type}$?`
       };
       question = `Who wrote ${fullTitle}?`;
-      answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} written by ${chain(imdb['Stars'])}.`;
+      answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} written by ${chain(imdb['Writer'])}.`;
       break;
     case "Writers":
       questions = {
         p: `Who wrote it?`,
-        e: `Who wrote the ${type}${possessive}?`
+        e: `Who wrote the ${type}$?`
       };
       question = `Who wrote ${fullTitle}?`;
-      answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} written by ${chain(imdb['Stars'])}.`;
+      answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} written by ${chain(imdb['Writers'])}.`;
       break;
     default:
       console.error(`${key} has not been accounted for in this version.`);
