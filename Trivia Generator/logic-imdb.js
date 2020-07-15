@@ -109,6 +109,10 @@ capturedData.forEach((data, i) => {
         imdb["Title"] = [front];
       }
     }
+    if (imdbGenres.includes(data.split(/\s{2,}/)[0].split(/\n/)[1])) {
+      imdb['Title'] = [imdbGenres.includes(data.split(/\s{2,}/)[0].split(/\n/)[0])]
+      imdb["Genre"] = [imdbGenres.includes(data.split(/\s{2,}/)[0].split(/\n/)[1])];
+    }
     if (imdbGenres.includes(data.split(/\s{2,}/)[1])) {
       imdb["Title"] = [data.split(/\s{2,}/)[0]];
       imdb["Genre"] = [data.split(/\s{2,}/)[1]];
@@ -342,6 +346,7 @@ for (key in imdb) {
     .split(" (")[0]
     .replace("TV", "Television")
     .toLowerCase();
+
   var title = chain(
     type !== "film"
       ? [`${imdb["Title"]} ${chain(imdb['Type'][0].match(/\(\d{4}– \)|\(\d{4}\)|\(\d{4}–\d{4}\)/))}`]
@@ -350,7 +355,7 @@ for (key in imdb) {
   var possessive = type[type.length - 1] === "s" ? "'" : "'s";
   var possessiveTitle =
     title.split(" (")[0][title.split(" (")[0].length - 1] === "s" ? "'" : "'s";
-  var isInProduction =
+    var isInProduction =
     !!chain(fullType).match(/\(\d{4}–\s\)/) && !fullType[0].includes("Mini");
   var fullTitle = formatTitle(title, type, fullType[0]);
 
