@@ -343,7 +343,7 @@ for (key in media.infobox) {
       line = [`What network was ${title} originally on?`, `${title}${possessive} was originally on ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     case "Original release":
-      line = [`When was ${title}${possessive} original release?`, `${capitalizeFirstLetter(title)} was originally released ${isPresent ? infobox[key].join(" ").replace("–", "to the") : infobox[key].join(" ").replace("–", "to")}.`, `${source}`]
+      line = [`When was ${title} released?`, `${capitalizeFirstLetter(title)} was released ${isPresent ? infobox[key].join(" ").replace("–", "to the") : infobox[key].join(" ").replace("–", "to")}.`, `${source}`]
       break;
     // case "Original run":
       
