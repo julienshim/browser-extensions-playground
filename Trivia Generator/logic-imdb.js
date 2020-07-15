@@ -110,8 +110,8 @@ capturedData.forEach((data, i) => {
       }
     }
     if (imdbGenres.includes(data.split(/\s{2,}/)[0].split(/\n/)[1])) {
-      imdb['Title'] = [imdbGenres.includes(data.split(/\s{2,}/)[0].split(/\n/)[0])]
-      imdb["Genre"] = [imdbGenres.includes(data.split(/\s{2,}/)[0].split(/\n/)[1])];
+      imdb['Title'] = [data.split(/\s{2,}/)[0].split(/\n/)[0]];
+      imdb["Genre"] = [data.split(/\s{2,}/)[0].split(/\n/)[1]];
     }
     if (imdbGenres.includes(data.split(/\s{2,}/)[1])) {
       imdb["Title"] = [data.split(/\s{2,}/)[0]];
@@ -346,7 +346,6 @@ for (key in imdb) {
     .split(" (")[0]
     .replace("TV", "Television")
     .toLowerCase();
-
   var title = chain(
     type !== "film"
       ? [`${imdb["Title"]} ${chain(imdb['Type'][0].match(/\(\d{4}– \)|\(\d{4}\)|\(\d{4}–\d{4}\)/))}`]
@@ -443,7 +442,7 @@ for (key in imdb) {
         e: `What is the ${type}${possessive} plot?`
       };
       question = `What is ${fullTitle}${possessiveTitle} plot?`;
-      answer = `${lowercaseFirstLetter(chain(imdb['Plot']))}`;
+      answer = `${chain(imdb['Plot'])}`;
       break;
     case "Production Co":
       break;
