@@ -327,12 +327,49 @@ for (key in imdb) {
 
   }
 
+  function formatReleaseDate(datelocale) {
+    var [date, locale] = datelocale.replace(')', '').split(/\s{1}\(/);
+    if (countryConverstion.hasOwnProperty(locale)) {
+      locale = countryConverstion[locale];
+    }
+    return `in ${locale} on ${date}`
+  }
+
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
   function lowercaseFirstLetter(string) {
     return string.charAt(0).toLowerCase() + string.slice(1);
+  }
+
+  function formatRunTime(time) {
+      if (!!time.match(/minutes|minute|hour|hours/)) {
+        if (!!time.match(/1 hours|1 minutes/) && !time.match(/\d{2,} hours|\d{2,} minutes/)) {
+          return time.replace('1 hours', '1 hour').replace('1 minutes', '1 minute');
+        }
+        return time;
+      }
+    var temp = time;
+    if(!!time.match(/1h\s{0,}/) && !time.match(/\d{2,}h\s{0,}/)) {
+      temp = temp.replace('h', ' hour')
+    } else {
+      temp = temp.replace('h', ' hours')
+    }
+    if(!!time.match(/1min\s{0,}/) && !time.match(/\d{2,}min\s{0,}/)) {
+      temp = temp.replace('min', ' minute')
+    } else {
+      temp = temp.replace('min', ' minutes')
+    }
+    return temp;
+  }
+
+  function formatLocation(location, isRunning) {
+    if (isRunning) {
+    return location.replace('USA', 'the United States').replace('UK', 'the United Kingdom');
+    }
+    return location.replace('USA', 'United States').replace('UK', 'United Kingdom');
+
   }
 
   var questions = undefined;
@@ -392,8 +429,28 @@ for (key in imdb) {
     case "Color":
       break;
     case "Country":
+      questions = {
+        p: `What is its country of origin?`,
+        e: `What is the ${type}${possessive} country of origin?`
+      };
+      question = `What is ${fullTitle}${possessiveTitle} country of origin?`;
+      answer = `The country of origin of ${fullTitle} is ${formatLocation(chain(imdb['Country']), true)}.`;
       break;
+    case "Creator":
+        questions = {
+          p: `Who is the creator of it?`,
+          e: `Who is the creator of the ${type}?`
+        };
+        question = `Who is the creator of ${fullTitle}${possessiveTitle}?`;
+        answer = `The creator of ${fullTitle} is ${chain(imdb['Creator'])}.`;
+        break;
     case "Creators":
+      questions = {
+        p: `Who is the creator of it?`,
+        e: `Who is the creator of the ${type}?`
+      };
+      question = `Who is the creators of ${fullTitle}${possessiveTitle}?`;
+      answer = `The creator of ${fullTitle} are ${chain(imdb['Creators'])}.`;
       break;
     case "Cumulative Worldwide Gross":
       var gross = imdb["Cumulative Worldwide Gross"];
@@ -423,6 +480,12 @@ for (key in imdb) {
       answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} directed by ${chain(imdb['Directors'])}.`;
       break;
     case "Filming Locations":
+      questions = {
+        p: `Where ${tense('is')} it filmed?`,
+        e: `Where ${tense('is')} the ${type} filmed?`
+      }
+      question = `Where ${tense('is')} ${fullTitle} filmed?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} filmed in ${formatLocation(chain(imdb['Filming Locations']), false)}.`;
       break;
     case "Genre":
       break;
@@ -431,6 +494,12 @@ for (key in imdb) {
     case "Language":
       break;
     case "Motion Picture Rating (MPAA)":
+      questions = {
+        p: `What is its movie rating?`,
+        e: `Where is the ${type}${possessive} movie rating?`
+      }
+      question = `What is ${fullTitle}${possessiveTitle} movie rating?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} is rated ${chain(imdb['Motion Picture Rating (MPAA)'].Detailed)}.`;
       break;
     case "Opening Weekend USA":
       break;
@@ -452,18 +521,17 @@ for (key in imdb) {
         e: `What is the ${type}${possessive} IMDb User Rating?`
       };
       question = `What is ${fullTitle}${possessiveTitle} IMDb User Rating?`;
-      answer = `${chain(imdb['Rating']['No. of Users'])} IMDb users have given a weighted average vote of ${chain(imdb['Rating']['Average Rating'])} for ${fullTitle}.`;
+      answer = `${chain(imdb['Rating']['No. of Users'])} IMDb users have given a weighted average vote of ${chain(imdb['Rating']['Average Rating']).replace('/', 'out of')} for ${fullTitle}.`;
       break;
     case "Release Date":
-      var ftCheckQ = imdb['Release Date'][0].includes('2021') ? 'was' : 'was';
+      var ftCheckQ = imdb['Release Date'][0].includes('2021') ? 'is' : 'was';
       var ftCheckA = imdb['Release Date'][0].includes('2021') ? 'will be' : 'was';
-      var formatReleaseDate = 
       questions = {
         p: `When ${ftCheckQ} its release date?`,
-        e: `When ${ftCheckQ} ${type}${possessive} release date?`
+        e: `When ${ftCheckQ} the ${type}${possessive} release date?`
       };
-      question = `What is ${fullTitle}${possessiveTitle} release date?`;
-      answer = `${capitalizeFirstLetter(fullTitle)} ${ftCheckA} released ${imdb['Release Date']}.`;
+      question = `What ${ftCheckQ} ${fullTitle}${possessiveTitle} release date?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} ${ftCheckA} released ${formatReleaseDate(chain(imdb['Release Date']))}.`;
       break;
     case "RuntimeM":
       break;
@@ -473,21 +541,22 @@ for (key in imdb) {
         e: `What is the ${type}${possessive} runtime?`
       };
       question = `What is ${fullTitle}${possessiveTitle} runtime?`;
-      answer = `${capitalizeFirstLetter(fullTitle)}${possessiveTitle} runtime is ${chain(imdb['RuntimeHM'])}.`;
+      answer = `${capitalizeFirstLetter(fullTitle)}${possessiveTitle} runtime is ${formatRunTime(chain(imdb['RuntimeHM']))}.`;
       break;
     case "Sound Mix":
       break;
     case "Stars":
       questions = {
-        p: `Who stars in it?`,
-        e: `Who stars in the ${type}?`
+        p: `Who ${tense('stars')} in it?`,
+        e: `Who ${tense('stars')} in the ${type}?`
       };
-      question = `Who stars in ${fullTitle}?`;
+      question = `Who ${tense('stars')} in ${fullTitle}?`;
       answer = `${capitalizeFirstLetter(fullTitle)} stars ${chain(imdb['Stars'])}.`;
       break;
     case "Storyline":
       break;
     case "Title":
+      // Default element
       break;
     case "Type":
       break;
@@ -498,7 +567,7 @@ for (key in imdb) {
     case "Writer":
       questions = {
         p: `Who wrote it?`,
-        e: `Who wrote the ${type}$?`
+        e: `Who wrote the ${type}?`
       };
       question = `Who wrote ${fullTitle}?`;
       answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} written by ${chain(imdb['Writer'])}.`;
@@ -516,9 +585,13 @@ for (key in imdb) {
   }
 
   if (questions && question && answer && source) {
+    var obj = {}
     for (key in questions) {
-      lines.push([questions[key], question, answer, source].join("\t"));
+      // obj[key] = [questions[key], question, answer, source].join("\t");
+      obj[key] = [question, answer].join("\t");
+
     }
+    lines.push(obj);
   }
 }
 
@@ -532,4 +605,15 @@ function shuffleArray(array) {
   return array;
 }
 
-console.log(shuffleArray(lines).join("\n"));
+// shuffleArray(lines)
+
+var output = []
+
+lines.forEach(arr => {
+  for (line in arr) {
+    output.push(arr[line])
+  }
+})
+
+console.log(output.join("\n"));
+
