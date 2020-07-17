@@ -564,7 +564,7 @@ for (key in imdb) {
         e: `What company produced the ${type}?`
       };
       question = `What company produced ${fullTitle}?`;
-      answer = `${fullTitle} was produced by ${chain(imdb['Production Co'])}.`;
+      answer = `${capitalizeFirstLetter(fullTitle)} was produced by ${chain(imdb['Production Co'])}.`;
       break;
     case "Rating":
       questions = {
