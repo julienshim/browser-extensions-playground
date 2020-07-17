@@ -109,6 +109,31 @@ capturedData.forEach((data, i) => {
         imdb["Title"] = [front];
       }
     }
+    if(data.includes(', ')) {
+      var [title, genres] = data.split(/\n/)
+      imdb['Title'] = [title];
+      genres = genres.split(", ");
+      genres.forEach((genre) => {
+        if(imdb.hasOwnProperty('Genre')) {
+          if (imdbGenres.includes(genre)) {
+            if (!imdb['Genre'].includes(genre)){
+              imdb["Genre"] = [...imdb['Genre'], genre];
+            }
+          } else {
+              console.error(`${genre} should be added to the genre list!`)
+          }
+        } else {
+            if (imdbGenres.includes(genre)) {
+              imdb['Genre'] = [genre]
+            } else {
+              console.error(`${genre} should be added to the genre list!`)
+            }
+        }
+      });
+    }
+    if(data.split(/\s{2}/)[0].includes('Approved')) {
+      imdb['Title'] = [data.split(/\s{2,}/)[0].split(/\n/)[0]];
+    }
     if (imdbGenres.includes(data.split(/\s{2,}/)[0].split(/\n/)[1])) {
       imdb['Title'] = [data.split(/\s{2,}/)[0].split(/\n/)[0]];
       imdb["Genre"] = [data.split(/\s{2,}/)[0].split(/\n/)[1]];
@@ -164,15 +189,20 @@ capturedData.forEach((data, i) => {
   } else if (data.includes(",")) {
     var genres = data.split(", ");
     genres.forEach((genre) => {
-      if (imdbGenres.includes(genre)) {
-        if (imdb.hasOwnProperty["Genre"]) {
-          if (!imdb["Genre"].includes(genre)) {
-            imdb["Genre"].push(genre);
+      if(imdb.hasOwnProperty('Genre')) {
+        if (imdbGenres.includes(genre)) {
+          if (!imdb['Genre'].includes(genre)){
+            imdb["Genre"] = [...imdb['Genre'], genre];
           }
+        } else {
+            console.error(`${genre} should be added to the genre list!`)
         }
-        imdb["Genre"] = [genre];
       } else {
-        console.log(`${genre} should be added to the Known IMDb Genres List!`);
+          if (imdbGenres.includes(genre)) {
+            imdb['Genre'] = [genre]
+          } else {
+            console.error(`${genre} should be added to the genre list!`)
+          }
       }
     });
     temp = format["Genre"];
@@ -235,15 +265,21 @@ capturedData.forEach((data, i) => {
   if (data.includes("Genres")) {
     var genres = data.split(/:\s{0,}/)[1].split(" | ");
     genres.forEach((genre) => {
-      if (imdbGenres.includes(genre)) {
-        if (imdb.hasOwnProperty["Genre"]) {
-          if (!imdb["Genre"].includes(genre)) {
-            imdb["Genre"].push(genre);
-          }
+      if(imdb.hasOwnProperty('Genre')) {
+        if (imdbGenres.includes(genre)) {
+            if (!imdb['Genre'].includes(genre)) {
+             imdb["Genre"] = [...imdb['Genre'], genre];
+            }
+            
+        } else {
+            console.error(`${genre} should be added to the genre list!`)
         }
-        imdb["Genre"] = [genre];
       } else {
-        console.log(`${genre} should be added to the Known IMDb Genres List!`);
+          if (imdbGenres.includes(genre)) {
+            imdb['Genre'] = [genre]
+          } else {
+            console.error(`${genre} should be added to the genre list!`)
+          }
       }
     });
   }
@@ -488,6 +524,14 @@ for (key in imdb) {
       answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} filmed in ${formatLocation(chain(imdb['Filming Locations']), false)}.`;
       break;
     case "Genre":
+      var genres = imdb['Genre'];
+      questions = {
+        p: `What genre is it?`,
+        e: `What genre is the ${type}?`
+      }
+      question = `What genre is ${fullTitle}?`;
+      answer = `The ${genres.length > 1 ? "genres" : "genre"} of ${fullTitle} ${genres.length > 1 ? "are" : "is"} ${chain(genres)}.`;
+      break;
       break;
     case "Gross USA":
       break;
@@ -499,7 +543,7 @@ for (key in imdb) {
         e: `Where is the ${type}${possessive} movie rating?`
       }
       question = `What is ${fullTitle}${possessiveTitle} movie rating?`;
-      answer = `${capitalizeFirstLetter(fullTitle)} is rated ${chain(imdb['Motion Picture Rating (MPAA)'].Detailed)}.`;
+      answer = `${capitalizeFirstLetter(fullTitle)} is rated ${chain(imdb['Motion Picture Rating (MPAA)'].hasOwnProperty('Detailed') ? imdb['Motion Picture Rating (MPAA)'].Detailed : imdb['Motion Picture Rating (MPAA)'].Short )}.`;
       break;
     case "Opening Weekend USA":
       break;
@@ -514,6 +558,12 @@ for (key in imdb) {
       answer = `${chain(imdb['Plot'])}`;
       break;
     case "Production Co":
+      questions = {
+        p: `What company produced it?`,
+        e: `What company produced the ${type}?`
+      };
+      question = `What company produced ${fullTitle}?`;
+      answer = `${fullTitle} was produced by ${chain(imdb['Production Co'])}.`;
       break;
     case "Rating":
       questions = {
@@ -586,9 +636,9 @@ for (key in imdb) {
 
   if (questions && question && answer && source) {
     var obj = {}
-    for (key in questions) {
-      // obj[key] = [questions[key], question, answer, source].join("\t");
-      obj[key] = [question, answer].join("\t");
+    for (qKey in questions) {
+      obj[qKey] = [questions[qKey], question, answer, key === 'Rating' ? source + '/ratings?ref_=tt_ov_rt' : source].join("\t");
+      // obj[qKey] = [questions[qKey], key === 'Rating' ? source + '/ratings?ref_=tt_ov_rt' : source].join("\t");
 
     }
     lines.push(obj);
