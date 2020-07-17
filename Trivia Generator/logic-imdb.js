@@ -148,7 +148,7 @@ capturedData.forEach((data, i) => {
         imdb["Title"] = [title];
         imdb["Original Title"] = [originalTitle.split(" (")[0]];
         imdb["RuntimeHM"] = [RuntimeHM];
-      } else if (!!data.match(/\nG|PG|PG-13|R|NC-17|Not Rated/)) {
+      } else if (!!data.match(/\nUnrated|G$|PG|PG-13|R$|NC-17|Not Rated/)) {
         var [title, originalTitle, Rating] = data.split(/\n/);
         imdb["Title"] = [title];
         imdb["Original Title"] = [originalTitle.split(" (")[0]];
@@ -166,7 +166,7 @@ capturedData.forEach((data, i) => {
         var [title, RuntimeHM] = data.split(/\n/);
         imdb["Title"] = [title];
         imdb["RuntimeHM"] = [RuntimeHM];
-      } else if (!!data.match(/\nG|PG|PG-13|R|NC-17/)) {
+      } else if (!!data.match(/\nUnrated|G$|PG|PG-13|R$|NC-17|Not Rated/)) {
         var [title, Rating] = data.split(/\n/);
         imdb["Title"] = [title];
         if (imdb.hasOwnProperty("Motion Picture Rating (MPAA)")) {
@@ -175,6 +175,7 @@ capturedData.forEach((data, i) => {
             Short: [Rating],
           };
         } else {
+          console.log('Why am I here? 2')
           imdb["Motion Picture Rating (MPAA)"] = { Short: [Rating] };
         }
       }
