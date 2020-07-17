@@ -426,8 +426,9 @@ for (key in imdb) {
   );
   var possessive = type[type.length - 1] === "s" ? "'" : "'s";
   var possessiveTitle =
-    title.split(" (")[0][title.split(" (")[0].length - 1] === "s" ? "'" : "'s";
-    var isInProduction =
+    title.split(" (")[0][title.split(" (")[0].length - 1] === "s" ? "'" : "'s";
+  console.log(title, possessiveTitle, title.split(" (")[0][title.split(" (")[0].length - 1])
+  var isInProduction =
     !!chain(fullType).match(/\(\d{4}–\s\)/) && !fullType[0].includes("Mini");
   var fullTitle = formatTitle(title, type, fullType[0]);
 
@@ -625,7 +626,7 @@ for (key in imdb) {
     case "Writers":
       questions = {
         p: `Who wrote it?`,
-        e: `Who wrote the ${type}$?`
+        e: `Who wrote the ${type}?`
       };
       question = `Who wrote ${fullTitle}?`;
       answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} written by ${chain(imdb['Writers'])}.`;
