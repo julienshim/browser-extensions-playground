@@ -279,7 +279,7 @@ for (key in media.infobox) {
       line = [`Who ${tense('is')} the cinematography for ${title} by?`, `The cinematography for ${title} ${tense('is')} by ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     case "Composer":
-      line = [`Who${tense('is')}the composer for ${title} by?`, `The composer for ${title} ${tense('is')} ${chainAnswer(infobox[key])}.`, `${source}`]
+      line = [`Who ${tense('is')} the composer for ${title} by?`, `The composer for ${title} ${tense('is')} ${chainAnswer(infobox[key])}.`, `${source}`]
       break;
     case "Country":
       line = [`What is the country of ${title}?`, `The country of ${title} is ${chainAnswer(infobox[key])}.`, `${source}`]
