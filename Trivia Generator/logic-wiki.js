@@ -259,15 +259,22 @@ for (key in media.infobox) {
     return isPresent ? string : past[string];
   }
 
+  questions = {};
+  question = undefined;
+  answer = undefined;
+
   switch(key) {
     case "Based on":
-      line = [`What ${tense('is')} ${title} based on?`, `${capitalizeFirstLetter(title)} ${tense('is')} based on ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `What ${tense('is')} ${title} based on?`;
+      answer = `${capitalizeFirstLetter(title)} ${tense('is')} based on ${chainAnswer(infobox[key])}.`
       break;
     case "Box office":
-      line = [`How did ${title} do at the box office?`, `${capitalizeFirstLetter(title)} earned ${chainAnswer(infobox[key])} at the box office.`, `${source}`]
+      question = `How did ${title} do at the box office?`;
+      answer = `${capitalizeFirstLetter(title)} earned ${chainAnswer(infobox[key])} at the box office.`
       break;
     case "Budget":
-      line = [`What ${tense('is')} the budget of ${title}?`, `The budget of ${title} ${tense('is')} ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `What ${tense('is')} the budget of ${title}?`;
+      answer = `The budget of ${title} ${tense('is')} ${chainAnswer(infobox[key])}.`
       break;
     // case "Cantonese":
       
@@ -276,34 +283,44 @@ for (key in media.infobox) {
       
     //   break;
     case "Cinematography":
-      line = [`Who ${tense('is')} the cinematography for ${title} by?`, `The cinematography for ${title} ${tense('is')} by ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `Who ${tense('is')} the cinematography for ${title} by?`
+      answer = `The cinematography for ${title} ${tense('is')} by ${chainAnswer(infobox[key])}.`
       break;
     case "Composer":
-      line = [`Who ${tense('is')} the composer for ${title} by?`, `The composer for ${title} ${tense('is')} ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `Who ${tense('is')} the composer for ${title} by?`
+      answer = `The composer for ${title} ${tense('is')} ${chainAnswer(infobox[key])}.`
       break;
     case "Country":
-      line = [`What is the country of ${title}?`, `The country of ${title} is ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `What is the country of ${title}?`;
+      answer = `The country of ${title} is ${chainAnswer(infobox[key])}.`;
       break;
     case "Country of origin":
-      line = [`What is ${title}${possessive} country of origin?`, `${capitalizeFirstLetter(title)}${possessive} country of origin is ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `What is ${title}${possessive} country of origin?`;
+      answer = `${capitalizeFirstLetter(title)}${possessive} country of origin is ${chainAnswer(infobox[key])}.`;
       break;
     case "Created by":
-      line = [`Who ${tense('is')} ${title} created by?`, `${capitalizeFirstLetter(title)} ${tense('is')} created by ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `Who ${tense('is')} ${title} created by?`;
+      answer = `${capitalizeFirstLetter(title)} ${tense('is')} created by ${chainAnswer(infobox[key])}.`;
       break;
     case "Directed by":
-      line = [`Who directed ${title}?`, `${capitalizeFirstLetter(title)} ${tense('is')} directed by ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `Who directed ${title}?`;
+      answer = `${capitalizeFirstLetter(title)} ${tense('is')} directed by ${chainAnswer(infobox[key])}.`;
       break;
     case "Distributed by":
-      line = [`Who distributed ${title}?`, `${capitalizeFirstLetter(title)} ${tense('is')} distributed by ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `Who distributed ${title}?`;
+      answer = `${capitalizeFirstLetter(title)} ${tense('is')} distributed by ${chainAnswer(infobox[key])}.`;
       break;
     case "Distributor":
-      line = [`Who is the distributor for ${title}?`, `The distributor for${title} is ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `Who is the distributor for ${title}?`;
+      answer = `The distributor for${title} is ${chainAnswer(infobox[key])}.`;
       break;
     case "Edited by":
-      line = [`Who edited ${title}?`, `${capitalizeFirstLetter(title)} ${tense('is')} edited by ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `Who edited ${title}?`;
+      answer = `${capitalizeFirstLetter(title)} ${tense('is')} edited by ${chainAnswer(infobox[key])}.`;
       break;
     case "Editor":
-      line = [`Who ${tense('is')} the editor for ${title}?`, `The editor for ${title} ${tense('is')} ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `Who ${tense('is')} the editor for ${title}?`;
+      answer = `The editor for ${title} ${tense('is')} ${chainAnswer(infobox[key])}.`;
       break;
     // case "English network":
       
@@ -312,50 +329,62 @@ for (key in media.infobox) {
       
     //   break;
     case "Executive producer":
-      line = [`Who ${tense('is')} the executive producer for ${title}?`, `The executive producer for ${title} ${tense('is')} by ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `Who ${tense('is')} the executive producer for ${title}?`;
+      answer = `The executive producer for ${title} ${tense('is')} by ${chainAnswer(infobox[key])}.`;
       break;
     case "Genre":
-      line = [`What is the genre of ${title}?`, `The genre of ${title} is ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `What is the genre of ${title}?`;
+      answer = `The genre of ${title} is ${chainAnswer(infobox[key])}.`;
       break;
     case "Language":
-      line = [`What is the language of ${title}?`, `The language of ${title} is ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `What is the language of ${title}?`;
+      answer = `The language of ${title} is ${chainAnswer(infobox[key])}.`;
 
       break;
     // case "Licensed by":
       
     //   break;
     case "Music by":
-      line = [`Who ${tense('is')} the music for ${title} by?`, `The music for ${title} ${tense('is')} by ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `Who ${tense('is')} the music for ${title} by?`;
+      answer = `The music for ${title} ${tense('is')} by ${chainAnswer(infobox[key])}.`;
       break;
     case "No. of episodes":
-      line = [`How many episodes does ${title} have?`, `The number of episodes for ${title} is ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `How many episodes does ${title} have?`;
+      answer = `The number of episodes for ${title} is ${chainAnswer(infobox[key])}.`;
       break;
     case "No. of seasons":
-      line = [`How many seasons does ${title} have?`, `The number of seasons for ${title} is ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `How many seasons does ${title} have?`;
+      answer = `The number of seasons for ${title} is ${chainAnswer(infobox[key])}.`;
       break;
     // case "Opening theme":
       
     //   break;
     case "Original language":
-      line = [`What was ${title}${possessive} original language?`, `${capitalizeFirstLetter(title)}${possessive} original language was ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `What was ${title}${possessive} original language?`;
+      answer = `${capitalizeFirstLetter(title)}${possessive} original language was ${chainAnswer(infobox[key])}.`;
       break;
     case "Original network":
-      line = [`What network was ${title} originally on?`, `${title}${possessive} was originally on ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `What network was ${title} originally on?`;
+      answer = `${title}${possessive} was originally on ${chainAnswer(infobox[key])}.`;
       break;
     case "Original release":
-      line = [`When was ${title} released?`, `${capitalizeFirstLetter(title)} was released ${isPresent ? infobox[key].join(" ").replace("–", "to the") : infobox[key].join(" ").replace("–", "to")}.`, `${source}`]
+      question = `When was ${title} released?`;
+      answer = `${capitalizeFirstLetter(title)} was released ${isPresent ? infobox[key].join(" ").replace("–", "to the") : infobox[key].join(" ").replace("–", "to")}.`;
       break;
     // case "Original run":
       
     //   break;
     case "Preceded by":
-      line = [`What series was ${title} preceded by?`, `${capitalizeFirstLetter(title)}${possessive} was preceded by ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `What series was ${title} preceded by?`;
+      answer = `${capitalizeFirstLetter(title)}${possessive} was preceded by ${chainAnswer(infobox[key])}.`;
       break;
     case "Produced by":
-      line = [`Who produced ${title}?`, `${capitalizeFirstLetter(title)} ${tense('is')} produced by ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `Who produced ${title}?`;
+      answer = `${capitalizeFirstLetter(title)} ${tense('is')} produced by ${chainAnswer(infobox[key])}.`;
       break;
     case "Producer":
-      line = [`Who ${tense('is')} the producer for ${title}?`, `The producer for ${capitalizeFirstLetter(title)} ${tense('is')} ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `Who ${tense('is')} the producer for ${title}?`;
+      answer = `The producer for ${capitalizeFirstLetter(title)} ${tense('is')} ${chainAnswer(infobox[key])}.`;
       break;
     // case "Production companies":
     //   lines.push(
@@ -365,36 +394,43 @@ for (key in media.infobox) {
     //   );
     //   break;
     case "Production company":
-      line = [`What company produced ${title}?`, `${capitalizeFirstLetter(title)} ${tense('is')} produced by ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `What company produced ${title}?`;
+      answer = `${capitalizeFirstLetter(title)} ${tense('is')} produced by ${chainAnswer(infobox[key])}.`;
       break;
     case "Production location":
-      line = [`Where ${tense('is')} ${title} produced?`, `${capitalizeFirstLetter(title)} ${tense('is')} produced in ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `Where ${tense('is')} ${title} produced?`;
+      answer = `${capitalizeFirstLetter(title)} ${tense('is')} produced in ${chainAnswer(infobox[key])}.`;
       break;
     case "Related shows":
-      line = [`What is a show that's related to ${title}?`, `${capitalizeFirstLetter(title)} is related to the ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `What is a show that's related to ${title}?`;
+      answer = `${capitalizeFirstLetter(title)} is related to the ${chainAnswer(infobox[key])}.`;
       break;
     case "Release date":
-      line = [`When was ${title} released?`, `${capitalizeFirstLetter(title)} was released on ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `When was ${title} released?`;
+      answer = `${capitalizeFirstLetter(title)} was released on ${chainAnswer(infobox[key])}.`;
       break;
     case "Running time":
-      line = [`What is the running time of ${title}?`, `The running time of ${title} is ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `What is the running time of ${title}?`;
+      answer = `The running time of ${title} is ${chainAnswer(infobox[key])}.`;
       break;
     // case "Screenplay by":
       
     //   break;
     case "Starring":
-      line = [`Who starred in ${title}?`, `${capitalizeFirstLetter(title)} stars ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `Who starred in ${title}?`;
+      answer = `${capitalizeFirstLetter(title)} stars ${chainAnswer(infobox[key])}.`;
       break;
     // case "Studio":
       
     //   break;
     case "Written by":
-      line = [`Who wrote ${title}?`, `${capitalizeFirstLetter(title)} ${tense('is')} written by ${chainAnswer(infobox[key])}.`, `${source}`]
+      question = `Who wrote ${title}?`;
+      answer = `${capitalizeFirstLetter(title)} ${tense('is')} written by ${chainAnswer(infobox[key])}.`;
       break;
     default:
       console.log(`Error:\t${key} is unaccounted for.\tSend help!`)
   }
-    lines.push(line.join("\t"))
+    lines.push([question, answer, source].join("\t"))
 }
 
 function shuffleArray(array) {
