@@ -487,8 +487,8 @@ for (key in imdb) {
         p: `Who is the creator of it?`,
         e: `Who is the creator of the ${type}?`
       };
-      question = `Who is the creators of ${fullTitle}${possessiveTitle}?`;
-      answer = `The creator of ${fullTitle} are ${chain(imdb['Creators'])}.`;
+      question = `Who is the creator of ${fullTitle}`;
+      answer = `The creators of ${fullTitle} are ${chain(imdb['Creators'])}.`;
       break;
     case "Cumulative Worldwide Gross":
       var gross = imdb["Cumulative Worldwide Gross"];
