@@ -479,7 +479,7 @@ for (key in imdb) {
           p: `Who is the creator of it?`,
           e: `Who is the creator of the ${type}?`
         };
-        question = `Who is the creator of ${fullTitle}${possessiveTitle}?`;
+        question = `Who is the creator of ${fullTitle}?`;
         answer = `The creator of ${fullTitle} is ${chain(imdb['Creator'])}.`;
         break;
     case "Creators":
