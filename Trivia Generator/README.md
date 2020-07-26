@@ -1,3 +1,51 @@
+Wikipedia data object
+
+```
+{
+  "Box office": [],
+  "Budget": [],
+  "Cantonese": [],
+  "Chinese": [],
+  "Cinematography": [],
+  "Composer": [],
+  "Country": [],
+  "Country of origin": [],
+  "Created by": [],
+  "Directed by": [],
+  "Distributed by": [],
+  "Distributor": [],
+  "Edited by": [],
+  "Editor": [],
+  "English network": [],
+  "Episodes": [],
+  "Executive producer": [],
+  "Genre": [],
+  "Language": [],
+  "Licensed by": [],
+  "Music by": [],
+  "No. of episodes": [],
+  "No. of seasons": [],
+  "Opening theme": [],
+  "Original language": [],
+  "Original network": [],
+  "Original release": [],
+  "Original run": [],
+  "Preceded by": [],
+  "Produced by": [],
+  "Producer": [],
+  "Production companies": [],
+  "Production company": [],
+  "Production location": [],
+  "Related shows": [],
+  "Release date": [],
+  "Running time": [],
+  "Screenplay by": [],
+  "Starring": [],
+  "Studio": [],
+  "Written by": []
+}
+```
+
 IMDb data object
 
 ```
@@ -20,7 +68,10 @@ IMDb data object
   "Original Title": [],
   "Plot": [],
   "Production Co": [],
-  "Rating": [],
+  "Rating": {
+    'Average Rating': [],
+    'No. of Users': []
+  }
   "Release Date": [],
   "RuntimeM": [],
   "RuntimeHM": [],
