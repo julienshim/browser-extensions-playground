@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+  "name": "Trivia Generator",
+  "version": "1.0",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://en.wikipedia.org/wiki/*",
+        "https://www.imdb.com/title/"
+      ],
+      "js": ["content.js"]
+    }
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": ["tabs"],
+  "browser_action": {}
+}
