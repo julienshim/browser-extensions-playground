@@ -337,54 +337,54 @@ for (key in media.infobox) {
       break;
     case "Directed by":
       questions = {
-        p: `?`,
-        e: `?`
+        p: `Who was it directed by?`,
+        e: `Who was the ${type} created by?`
       }
       question = `Who directed ${title}?`;
       answer = `${capitalizeFirstLetter(title)} ${tense('is')} directed by ${chainAnswer(infobox[key])}.`;
       break;
     case "Distributed by":
       questions = {
-        p: `?`,
-        e: `?`
+        p: `What company was it distributed by?`,
+        e: `Waht company was the type distributed by?`
       }
       question = `Who distributed ${title}?`;
       answer = `${capitalizeFirstLetter(title)} ${tense('is')} distributed by ${chainAnswer(infobox[key])}.`;
       break;
     case "Distributor":
       questions = {
-        p: `?`,
-        e: `?`
+        p: `Who distributed it?`,
+        e: `Who distributed the ${type}?`
       }
       question = `Who is the distributor for ${title}?`;
       answer = `The distributor for${title} is ${chainAnswer(infobox[key])}.`;
       break;
     case "Edited by":
       questions = {
-        p: `?`,
-        e: `?`
+        p: `Who edited it?`,
+        e: `Who edited the ${type}?`
       }
       question = `Who edited ${title}?`;
       answer = `${capitalizeFirstLetter(title)} ${tense('is')} edited by ${chainAnswer(infobox[key])}.`;
       break;
     case "Editor":
       questions = {
-        p: `?`,
-        e: `?`
+        p: `Who edited it?`,
+        e: `Who edited the ${type}?`
       }
       question = `Who ${tense('is')} the editor for ${title}?`;
       answer = `The editor for ${title} ${tense('is')} ${chainAnswer(infobox[key])}.`;
       break;
-    case "English network":
+    // case "English network":
       
-      break;
-    case "Episodes":
+    //   break;
+    // case "Episodes":
       
-      break;
+    //   break;
     case "Executive producer":
       questions = {
-        p: `?`,
-        e: `?`
+        p: `Who was the executive producer for it?`,
+        e: `Who was the executive producer for the ${type}?`
       }
       question = `Who ${tense('is')} the executive producer for ${title}?`;
       answer = `The executive producer for ${title} ${tense('is')} by ${chainAnswer(infobox[key])}.`;
