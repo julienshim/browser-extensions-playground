@@ -391,16 +391,16 @@ for (key in media.infobox) {
       break;
     case "Genre":
       questions = {
-        p: `?`,
-        e: `?`
+        p: `What is its genre??`,
+        e: `What is the ${type} genre??`
       }
-      question = `What is the genre of ${title}?`;
+      question = `What is the ${title} genre?`;
       answer = `The genre of ${title} is ${chainAnswer(infobox[key])}.`;
       break;
     case "Language":
       questions = {
-        p: `?`,
-        e: `?`
+        p: `What language is it in??`,
+        e: `What language is the ${type} in?`
       }
       question = `What is the language of ${title}?`;
       answer = `The language of ${title} is ${chainAnswer(infobox[key])}.`;
@@ -410,24 +410,24 @@ for (key in media.infobox) {
       break;
     case "Music by":
       questions = {
-        p: `?`,
-        e: `?`
+        p: `Who is its music by??`,
+        e: `Who is the ${type} music by?`
       }
       question = `Who ${tense('is')} the music for ${title} by?`;
       answer = `The music for ${title} ${tense('is')} by ${chainAnswer(infobox[key])}.`;
       break;
     case "No. of episodes":
       questions = {
-        p: `?`,
-        e: `?`
+        p: `How many episodes does it have??`,
+        e: `How many episodes does the ${type} have?`
       }
       question = `How many episodes does ${title} have?`;
       answer = `The number of episodes for ${title} is ${chainAnswer(infobox[key])}.`;
       break;
     case "No. of seasons":
       questions = {
-        p: `?`,
-        e: `?`
+        p: `How many seasons does it have??`,
+        e: `How many seasons does the ${type} have?`
       }
       question = `How many seasons does ${title} have?`;
       answer = `The number of seasons for ${title} is ${chainAnswer(infobox[key])}.`;
