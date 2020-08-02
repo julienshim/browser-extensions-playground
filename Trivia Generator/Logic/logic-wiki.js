@@ -437,24 +437,24 @@ for (key in media.infobox) {
       break;
     case "Original language":
       questions = {
-        p: `?`,
-        e: `?`
+        p: `What language is it?`,
+        e: `What language is the ${type}?`
       }
       question = `What was ${title}${possessive} original language?`;
       answer = `${capitalizeFirstLetter(title)}${possessive} original language was ${chainAnswer(infobox[key])}.`;
       break;
     case "Original network":
       questions = {
-        p: `?`,
-        e: `?`
+        p: `What network was it on?`,
+        e: `What network was the ${type} on?`
       }
-      question = `What network was ${title} originally on?`;
-      answer = `${title}${possessive} was originally on ${chainAnswer(infobox[key])}.`;
+      question = `What network was ${title} on?`;
+      answer = `${title}${possessive} was on ${chainAnswer(infobox[key])}.`;
       break;
     case "Original release":
       questions = {
-        p: `?`,
-        e: `?`
+        p: `When was it released?`,
+        e: `When was the tye ${type} released?`
       }
       question = `When was ${title} released?`;
       answer = `${capitalizeFirstLetter(title)} was released ${isPresent ? infobox[key].join(" ").replace("–", "to the") : infobox[key].join(" ").replace("–", "to")}.`;
@@ -464,47 +464,51 @@ for (key in media.infobox) {
       break;
     case "Preceded by":
       questions = {
-        p: `?`,
-        e: `?`
+        p: `What preceded it??`,
+        e: `What preceded the ${type}?`
       }
       question = `What series was ${title} preceded by?`;
       answer = `${capitalizeFirstLetter(title)}${possessive} was preceded by ${chainAnswer(infobox[key])}.`;
       break;
     case "Produced by":
       questions = {
-        p: `?`,
-        e: `?`
+        p: `Who produced it?`,
+        e: `Who produced the ${type}?`
       }
       question = `Who produced ${title}?`;
       answer = `${capitalizeFirstLetter(title)} ${tense('is')} produced by ${chainAnswer(infobox[key])}.`;
       break;
     case "Producer":
       questions = {
-        p: `?`,
-        e: `?`
+        p: `Who produced it?`,
+        e: `Who produced the ${type}?`
       }
       question = `Who ${tense('is')} the producer for ${title}?`;
       answer = `The producer for ${capitalizeFirstLetter(title)} ${tense('is')} ${chainAnswer(infobox[key])}.`;
       break;
     case "Production companies":
-      lines.push(
-        `What company produced ${the}${title}?\t${
-          the.charAt(0).toUpperCase() + the.slice(1)
-        }${title} was produced by ${chainAnswer(answer)}.\t${source}`
-      );
-      break;
-    case "Production company":
       questions = {
         p: `?`,
         e: `?`
+      }
+      // lines.push(
+      //   `What company produced ${the}${title}?\t${
+      //     the.charAt(0).toUpperCase() + the.slice(1)
+      //   }${title} was produced by ${chainAnswer(answer)}.\t${source}`
+      // );
+      break;
+    case "Production company":
+      questions = {
+        p: `What company produced it?`,
+        e: `What company produced the ${type}?`
       }
       question = `What company produced ${title}?`;
       answer = `${capitalizeFirstLetter(title)} ${tense('is')} produced by ${chainAnswer(infobox[key])}.`;
       break;
     case "Production location":
       questions = {
-        p: `?`,
-        e: `?`
+        p: `Where was it produced?`,
+        e: `Where was the ${type} produced?`
       }
       question = `Where ${tense('is')} ${title} produced?`;
       answer = `${capitalizeFirstLetter(title)} ${tense('is')} produced in ${chainAnswer(infobox[key])}.`;
