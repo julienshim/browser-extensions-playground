@@ -515,16 +515,16 @@ for (key in media.infobox) {
       break;
     case "Related shows":
       questions = {
-        p: `?`,
-        e: `?`
+        p: `What shows are related to it?`,
+        e: `What shows are related to the ${type}?`
       }
       question = `What is a show that's related to ${title}?`;
       answer = `${capitalizeFirstLetter(title)} is related to the ${chainAnswer(infobox[key])}.`;
       break;
     case "Release date":
       questions = {
-        p: `?`,
-        e: `?`
+        p: `When was it released?`,
+        e: `When was the ${type} released?`
       }
       question = `When was ${title} released?`;
       answer = `${capitalizeFirstLetter(title)} was released on ${chainAnswer(infobox[key])}.`;
