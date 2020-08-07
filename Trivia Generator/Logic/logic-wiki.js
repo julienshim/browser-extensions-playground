@@ -237,7 +237,7 @@ for (key in media.infobox) {
   var type = media.type;
   var possessiveType = type[type.length-1] == 's' ? '\'s' : '\'s';
   var year = media.year;
-  var fullTitle = `the ${year} ${media.title.flipped ? '' : type} ${title}`.replace('  ', ' ');
+  var fullTitle = `the ${media.title.normal.match(/\(\d{4}/) ? '' : year + ' '}${media.title.flipped ? '' : type} ${title}`.replace('  ', ' ');
   var pluralItems = undefined;
 
   function presenceCheck(keyToCheck) {
