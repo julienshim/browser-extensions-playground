@@ -591,7 +591,7 @@ for (key in media.infobox) {
         e: `Who wrote the ${type}${possessiveType} screenplay?`
       }
       question = `Who wrote ${fullTitle}${possessive} screenplay?`;
-      answer = `The running time of ${fullTitle} is ${chainAnswer(infobox[key])}.`;
+      answer = `The screenplay for ${fullTitle} was written by ${chainAnswer(infobox[key])}.`;
       break;
     case "Starring":
       questions = {
