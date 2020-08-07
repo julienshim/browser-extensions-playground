@@ -198,7 +198,6 @@ if (media.infobox.hasOwnProperty("Based on")) {
     media.infobox["Based on"] = splitBy(media.infobox["Based on"].split(/\n/));
   } else {
     var [book, author] = media.infobox["Based on"].split(/by |by/);
-    console.log(book, author)
     media.infobox["Based on"] = [[
       book.trim(),
       chainData(author.trim().split(/\n/)),
@@ -488,7 +487,7 @@ for (key in media.infobox) {
         e: `What network was the ${type} on?`
       }
       question = `What network was ${fullTitle} on?`;
-      answer = `${capitalizeFirstLetter(fullTitle)}$ was on ${chainAnswer(infobox[key])}.`;
+      answer = `${capitalizeFirstLetter(fullTitle)} was on ${chainAnswer(infobox[key])}.`;
       break;
     case "Original release":
       questions = {
