@@ -521,11 +521,11 @@ for (key in imdb) {
       break;
     case "Filming Locations":
       questions = {
-        p: `Where ${tense('is')} it filmed?`,
-        e: `Where ${tense('is')} the ${type} filmed?`
+        p: `Where ${tense('is')} it shot?`,
+        e: `Where ${tense('is')} the ${type} shot?`
       }
-      question = `Where ${tense('is')} ${fullTitle} filmed?`;
-      answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} filmed in ${formatLocation(chain(imdb['Filming Locations']), false)}.`;
+      question = `Where ${tense('is')} ${fullTitle} shot?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} shot in ${formatLocation(chain(imdb['Filming Locations']), false)}.`;
       break;
     case "Genre":
       var genres = imdb['Genre'];
