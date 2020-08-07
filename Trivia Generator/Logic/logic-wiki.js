@@ -455,7 +455,7 @@ for (key in media.infobox) {
         e: `How many episodes does the ${type} have?`
       }
       question = `How many episodes does ${fullTitle} have?`;
-      answer = `The number of episodes for ${fullTitle} is ${chainAnswer(infobox[key])}.`;
+      answer = `The number of episodes for ${fullTitle} is ${chainAnswer(infobox[key]).replace(' (list of episodes)', '')}.`;
       break;
     case "No. of seasons":
       questions = {
