@@ -197,7 +197,8 @@ if (media.infobox.hasOwnProperty("Based on")) {
   ) {
     media.infobox["Based on"] = splitBy(media.infobox["Based on"].split(/\n/));
   } else {
-    var [book, author] = media.infobox["Based on"].split("by ");
+    var [book, author] = media.infobox["Based on"].split(/by |by/);
+    console.log(book, author)
     media.infobox["Based on"] = [[
       book.trim(),
       chainData(author.trim().split(/\n/)),
