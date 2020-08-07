@@ -527,7 +527,7 @@ for (key in media.infobox) {
         e: `Who produced the ${type}?`
       }
       question = `Who produced ${fullTitle}?`;
-      answer = `${capitalizeFirstLetter(title)} ${tense('is')} produced by ${chainAnswer(infobox[key])}.`;
+      answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} produced by ${chainAnswer(infobox[key])}.`;
       break;
     case "Producer":
       questions = {
