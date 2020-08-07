@@ -498,7 +498,6 @@ for (key in media.infobox) {
       answer = `${capitalizeFirstLetter(fullTitle)} was released ${isPresent ? infobox[key].join(" ").replace("–", " to the ") : infobox[key].join(" ").replace("–", " to ")}.`;
       break;
     case "Original run":
-      // Skipped
       questions = {
         p: `When was its original run?`,
         e: `When was the ${type}${possessiveType} original run?`
@@ -591,7 +590,7 @@ for (key in media.infobox) {
         p: `Who wrote its screenplay?`,
         e: `Who wrote the ${type}${possessiveType} screenplay?`
       }
-      question = `What is the running time of ${fullTitle}?`;
+      question = `Who wrote ${fullTitle}${possessive} screenplay?`;
       answer = `The running time of ${fullTitle} is ${chainAnswer(infobox[key])}.`;
       break;
     case "Starring":
