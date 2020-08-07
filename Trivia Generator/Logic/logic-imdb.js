@@ -1,6 +1,6 @@
 console.clear()
 
-var mcmode = false;
+var mcmode = true;
 
 var countryConverstion = {
   USA: "United States",
