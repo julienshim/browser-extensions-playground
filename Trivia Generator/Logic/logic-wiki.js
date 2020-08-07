@@ -57,7 +57,7 @@ media.source = window.location.href;
 function revealMediaType(p) {
   var pLow = p.toLowerCase();
   switch (true) {
-    case pLow.includes("anime"):
+    case pLow.includes("anime") || pLow.includes("manga"):
       return "anime";
       break;
     case pLow.includes("television series") ||
@@ -238,6 +238,7 @@ for (key in media.infobox) {
   var possessiveType = type[type.length-1] == 's' ? '\'s' : '\'s';
   var year = media.year;
   var fullTitle = `the ${year} ${media.title.flipped ? '' : type} ${title}`.replace('  ', ' ');
+  var pluralItems = undefined;
 
   function presenceCheck(keyToCheck) {
     return infobox[keyToCheck].join(" " ).toLowerCase(). includes('present');
@@ -281,7 +282,7 @@ for (key in media.infobox) {
         e: `What audio format is the ${type} in?`
       }
       question = `What audio format is ${fullTitle} in?`;
-      answer = `The audio format for ${fulltitle} is ${chainAnswer(infobox[key])}.`;
+      answer = `The audio format for ${fullTitle} is ${chainAnswer(infobox[key])}.`;
       break;
     case "Based on":
       questions = {
@@ -394,7 +395,7 @@ for (key in media.infobox) {
       answer = `The editor for ${fullTitle} ${tense('is')} ${chainAnswer(infobox[key])}.`;
       break;
     case "English network":
-      
+      // Skipped
       break;
     case "Episodes":
       questions = {
@@ -418,22 +419,23 @@ for (key in media.infobox) {
         e: `What was the ${type} followed by?`
       }
       question = `What was ${fullTitle} followed by?`;
-      answer = `${capitalizeFirstLetter(fullTitle)} was followed by ${chain(infobox[key])}.`
+      answer = `${capitalizeFirstLetter(fullTitle)} was followed by ${chainAnswer(infobox[key])}.`
       break;
     case "Genre":
       questions = {
         p: `What is its genre?`,
         e: `What is the ${type}${possessiveType} genre?`
       }
-      question = `What is the ${fullTitle} genre?`;
-      answer = `The genre of ${fullTitle} is ${chainAnswer(infobox[key])}.`;
+      question = `What is ${fullTitle}${possessive} genre?`;
+      isPlural = infobox[key].length > 1;
+      answer = `The ${isPlural ? 'genres': 'genre'} of ${fullTitle} ${isPlural ? 'are' : 'is'} ${chainAnswer(infobox[key])}.`;
       break;
     case "Language":
       questions = {
         p: `What language is it in?`,
         e: `What language is the ${type} in?`
       }
-      question = `What is the language of ${fullTitle}?`;
+      question = `What language is ${fullTitle} in?`;
       answer = `The language of ${fullTitle} is ${chainAnswer(infobox[key])}.`;
       break;
     case "Licensed by":
@@ -441,10 +443,10 @@ for (key in media.infobox) {
       break;
     case "Music by":
       questions = {
-        p: `Who is its music by?`,
-        e: `Who is the ${type}${possessiveType} music by?`
+        p: `Who ${tense('is')} its music by?`,
+        e: `Who ${tense('is')} the ${type}${possessiveType} music by?`
       }
-      question = `Who ${tense('is')} the music for ${fullTitle} by?`;
+      question = `Who ${tense('is')} ${fullTitle}${possessive} msuic by?`;
       answer = `The music for ${fullTitle} ${tense('is')} by ${chainAnswer(infobox[key])}.`;
       break;
     case "No. of episodes":
@@ -464,15 +466,20 @@ for (key in media.infobox) {
       answer = `The number of seasons for ${fullTitle} is ${chainAnswer(infobox[key])}.`;
       break;
     case "Opening theme":
-      
+      questions = {
+        p: `What is its opening theme?`,
+        e: `What is the ${type}${possessiveType} opening theme?`
+      }
+      question = `What is ${fullTitle}${possessive} opening theme?`;
+      answer = `The opening theme for ${fullTitle} is ${chainAnswer(infobox[key])}.`;
       break;
     case "Original language":
       questions = {
         p: `What language is it?`,
         e: `What language is the ${type}?`
       }
-      question = `What was ${fullTitle}${possessive} original language?`;
-      answer = `${capitalizeFirstLetter(fullTitle)}${possessive} original language was ${chainAnswer(infobox[key])}.`;
+      question = `What language is ${fullTitle}?`;
+      answer = `The language of ${fullTitle} is ${chainAnswer(infobox[key])}.`;
       break;
     case "Original network":
       questions = {
@@ -480,18 +487,24 @@ for (key in media.infobox) {
         e: `What network was the ${type} on?`
       }
       question = `What network was ${fullTitle} on?`;
-      answer = `${fullTitle}${possessive} was on ${chainAnswer(infobox[key])}.`;
+      answer = `${capitalizeFirstLetter(fullTitle)}$ was on ${chainAnswer(infobox[key])}.`;
       break;
     case "Original release":
       questions = {
         p: `When was it released?`,
-        e: `When was the tye ${type} released?`
+        e: `When was the ${type} released?`
       }
       question = `When was ${fullTitle} released?`;
       answer = `${capitalizeFirstLetter(fullTitle)} was released ${isPresent ? infobox[key].join(" ").replace("–", " to the ") : infobox[key].join(" ").replace("–", " to ")}.`;
       break;
     case "Original run":
-      
+      // Skipped
+      questions = {
+        p: `When was its original run?`,
+        e: `When was the ${type}${possessiveType} original run?`
+      }
+      question = `When was ${fullTitle}${possessive} original run?`
+      answer = `The original run of ${fullTitle} was from ${isPresent ? infobox[key].join(" ").replace("–", " to the ") : infobox[key].join(" ").replace("–", " to ")}.`;
       break;
     case "Preceded by":
       questions = {
@@ -504,7 +517,7 @@ for (key in media.infobox) {
     case "Picture format":
       questions = {
         p: `What is its picture format?`,
-        e: `What is the ${type}${posessiveType} picture format?`
+        e: `What is the ${type}${possessiveType} picture format?`
       }
       question = `What is ${fullTitle}${possessive} picture format?`
       answer = `The picture format for ${fullTitle} is ${chainAnswer(infobox[key])}.`
@@ -595,7 +608,7 @@ for (key in media.infobox) {
         e: `What studio worked on the ${type}?`
       }
       question = `What studio worked on ${fullTitle}?`
-      answer = ``
+      answer = `${capitalizeFirstLetter(fullTitle)} was animated by ${chainAnswer(infokey[key])}.`
       break;
     case "Written by":
       questions = {
