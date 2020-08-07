@@ -227,7 +227,7 @@ function capitalizeFirstLetter(string) {
 for (key in media.infobox) {
   var infobox = media.infobox;
   var title = media.title.flipped ? media.title.flipped : media.title.normal;
-  var possessive = title[title.length-1] === 's' ? '\'s' : '\'s';
+  var possessive = title[title.length-1] === 's' ? '\'' : '\'s';
   var source = media.source;
   var questions = undefined;
   var question = undefined;
@@ -235,7 +235,7 @@ for (key in media.infobox) {
   var line = [];
   var isPresent;
   var type = media.type;
-  var possessiveType = type[type.length-1] == 's' ? '\'s' : '\'s';
+  var possessiveType = type[type.length-1] == 's' ? '\'' : '\'s';
   var year = media.year;
   var fullTitle = `the ${media.title.normal.match(/\(\d{4}/) ? '' : year + ' '}${media.title.flipped ? '' : type} ${title}`.replace('  ', ' ');
   var pluralItems = undefined;
@@ -582,7 +582,7 @@ for (key in media.infobox) {
         p: `What is its running time?`,
         e: `What is the ${type}${possessiveType} running time?`
       }
-      question = `What is the running time of ${fullTitle}?`;
+      question = `What is ${fullTitle}${possessive} running time?`;
       answer = `The running time of ${fullTitle} is ${chainAnswer(infobox[key])}.`;
       break;
     case "Screenplay by":
