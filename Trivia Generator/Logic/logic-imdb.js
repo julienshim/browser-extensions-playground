@@ -1,4 +1,6 @@
-clear();
+console.clear()
+
+var mcmode = false;
 
 var countryConverstion = {
   USA: "United States",
@@ -637,13 +639,16 @@ for (key in imdb) {
   }
 
   if (questions && question && answer && source) {
-    var obj = {}
-    for (qKey in questions) {
-      obj[qKey] = [questions[qKey], question, answer, key === 'Rating' ? source + '/ratings?ref_=tt_ov_rt' : source].join("\t");
-      // obj[qKey] = [questions[qKey], key === 'Rating' ? source + '/ratings?ref_=tt_ov_rt' : source].join("\t");
-
+    if (mcmode) {
+      var obj = {}
+      for (qKey in questions) {
+        obj[qKey] = [questions[qKey], question, answer, key === 'Rating' ? source + '/ratings?ref_=tt_ov_rt' : source].join("\t");
+        // obj[qKey] = [questions[qKey], key === 'Rating' ? source + '/ratings?ref_=tt_ov_rt' : source].join("\t");
+      }
+      lines.push(obj);
+    } else {
+      lines.push([question, answer, key === 'Rating' ? source + '/ratings?ref_=tt_ov_rt' : source].join("\t"))
     }
-    lines.push(obj);
   }
 }
 
@@ -661,11 +666,17 @@ function shuffleArray(array) {
 
 var output = []
 
-lines.forEach(arr => {
-  for (line in arr) {
-    output.push(arr[line])
-  }
-})
+  lines.forEach(arr => {
+    if (mcmode) {
+      for (line in arr) {
+        output.push(arr[line])
+      }
+    } else {
+      output.push(arr)
+    }
+  })
+
+
 
 console.log(output.join("\n"));
 
