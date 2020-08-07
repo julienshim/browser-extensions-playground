@@ -265,6 +265,8 @@ for (key in media.infobox) {
   answer = undefined;
 
   switch(key) {
+    case "Audio format":
+      break;
     case "Based on":
       questions = {
         p: `What is it based on?`,
@@ -289,12 +291,12 @@ for (key in media.infobox) {
       question = `What ${tense('is')} the budget of ${title}?`;
       answer = `The budget of ${title} ${tense('is')} ${chainAnswer(infobox[key])}.`
       break;
-    // case "Cantonese":
+    case "Cantonese":
       
-    //   break;
-    // case "Chinese":
+      break;
+    case "Chinese":
       
-    //   break;
+      break;
     case "Cinematography":
       questions = {
         p: `Who was its cinematography by?`,
@@ -375,12 +377,12 @@ for (key in media.infobox) {
       question = `Who ${tense('is')} the editor for ${title}?`;
       answer = `The editor for ${title} ${tense('is')} ${chainAnswer(infobox[key])}.`;
       break;
-    // case "English network":
+    case "English network":
       
-    //   break;
-    // case "Episodes":
+      break;
+    case "Episodes":
       
-    //   break;
+      break;
     case "Executive producer":
       questions = {
         p: `Who was the executive producer for it?`,
@@ -388,6 +390,8 @@ for (key in media.infobox) {
       }
       question = `Who ${tense('is')} the executive producer for ${title}?`;
       answer = `The executive producer for ${title} ${tense('is')} by ${chainAnswer(infobox[key])}.`;
+      break;
+    case "Followed by":
       break;
     case "Genre":
       questions = {
@@ -469,6 +473,8 @@ for (key in media.infobox) {
       }
       question = `What series was ${title} preceded by?`;
       answer = `${capitalizeFirstLetter(title)}${possessive} was preceded by ${chainAnswer(infobox[key])}.`;
+      break;
+    case "Picture format":
       break;
     case "Produced by":
       questions = {
