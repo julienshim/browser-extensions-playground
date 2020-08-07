@@ -319,7 +319,7 @@ for (key in media.infobox) {
         p: `Who ${tense('is')} its cinematography by?`,
         e: `Who ${tense('is')} the ${type}${possessiveType} cinematography by?`
       }
-      question = `Who ${tense('is')} ${fullTitle}${possessive} by?`
+      question = `Who ${tense('is')} ${fullTitle}${possessive} cinematography by?`
       answer = `The cinematography for ${fullTitle} ${tense('is')} by ${chainAnswer(infobox[key])}.`
       break;
     case "Composer":
