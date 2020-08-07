@@ -2,6 +2,8 @@ Wikipedia data object
 
 ```
 {
+  "Audio format": [],
+  "Based on": [],
   "Box office": [],
   "Budget": [],
   "Cantonese": [],
@@ -19,6 +21,7 @@ Wikipedia data object
   "English network": [],
   "Episodes": [],
   "Executive producer": [],
+  "Followed by": [],
   "Genre": [],
   "Language": [],
   "Licensed by": [],
@@ -31,6 +34,7 @@ Wikipedia data object
   "Original release": [],
   "Original run": [],
   "Preceded by": [],
+  "Picture format": [],
   "Produced by": [],
   "Producer": [],
   "Production companies": [],
