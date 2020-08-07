@@ -1,4 +1,6 @@
-clear()
+console.clear()
+
+var mcmode = true;
 
 // Data
 
@@ -96,6 +98,10 @@ function formatTitle(t) {
 }
 
 formatTitle(document.querySelector("#firstHeading").textContent);
+
+// Capture Year
+
+media.year = document.querySelector('#catlinks').innerText.match(/\d{4,}/)[0];
 
 // Scrape infobox
 
@@ -220,7 +226,7 @@ function capitalizeFirstLetter(string) {
 
 for (key in media.infobox) {
   var infobox = media.infobox;
-  var title = media.title.flipped ? `the ${media.title.flipped}` : media.title.normal;
+  var title = media.title.flipped ? media.title.flipped : media.title.normal;
   var possessive = title[title.length-1] === 's' ? '\'s' : '\'s';
   var source = media.source;
   var questions = undefined;
@@ -229,6 +235,9 @@ for (key in media.infobox) {
   var line = [];
   var isPresent;
   var type = media.type;
+  var possessiveType = type[type.length-1] == 's' ? '\'s' : '\'s';
+  var year = media.year;
+  var fullTitle = `the ${year} ${media.title.flipped ? '' : type} ${title}`.replace('  ', ' ');
 
   function presenceCheck(keyToCheck) {
     return infobox[keyToCheck].join(" " ).toLowerCase(). includes('present');
@@ -255,7 +264,8 @@ for (key in media.infobox) {
     var past = {
       "is": "was",
       "stars": "starred",
-      "directs": 'directed'
+      "directs": 'directed',
+      "composes": "composed"
     };
     return isPresent ? string : past[string];
   }
@@ -266,175 +276,192 @@ for (key in media.infobox) {
 
   switch(key) {
     case "Audio format":
+      questions = {
+        p: `What audio format is it in?`,
+        e: `What audio format is the ${type} in?`
+      }
+      question = `What audio format is ${fullTitle} in?`;
+      answer = `The audio format for ${fulltitle} is ${chainAnswer(infobox[key])}.`;
       break;
     case "Based on":
       questions = {
-        p: `What is it based on?`,
-        e: `What is the ${type} based on?`
+        p: `What ${tense('is')} it based on?`,
+        e: `What ${tense('is')} the ${type} based on?`
       }
-      question = `What ${tense('is')} ${title} based on?`;
-      answer = `${capitalizeFirstLetter(title)} ${tense('is')} based on ${chainAnswer(infobox[key])}.`
+      question = `What ${tense('is')} ${fullTitle} based on?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} based on ${chainAnswer(infobox[key])}.`
       break;
     case "Box office":
       questions = {
         p: `How much did it make at the box office?`,
         e: `How much did the ${type} make at the box office?`
       }
-      question = `How did ${title} do at the box office?`;
-      answer = `${capitalizeFirstLetter(title)} earned ${chainAnswer(infobox[key])} at the box office.`
+      question = `How much did ${fullTitle} make at the box office?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} grossed ${chainAnswer(infobox[key])} at the box office.`
       break;
     case "Budget":
       questions = {
-        p: `What was its budget?`,
-        e: `What was the ${type} budget?`
+        p: `What ${tense('is')} its budget?`,
+        e: `What ${tense('is')} the ${type}${possessiveType} budget?`
       }
-      question = `What ${tense('is')} the budget of ${title}?`;
-      answer = `The budget of ${title} ${tense('is')} ${chainAnswer(infobox[key])}.`
+      question = `What ${tense('is')} ${fullTitle}${possessive} budget?`;
+      answer = `The budget of ${fullTitle} ${tense('is')} ${chainAnswer(infobox[key])}.`
       break;
     case "Cantonese":
-      
+      // Skipped
       break;
     case "Chinese":
-      
+      // Skipped
       break;
     case "Cinematography":
       questions = {
-        p: `Who was its cinematography by?`,
-        e: `Who was the types cinematography by?`
+        p: `Who ${tense('is')} its cinematography by?`,
+        e: `Who ${tense('is')} the ${type}${possessiveType} cinematography by?`
       }
-      question = `Who ${tense('is')} the cinematography for ${title} by?`
-      answer = `The cinematography for ${title} ${tense('is')} by ${chainAnswer(infobox[key])}.`
+      question = `Who ${tense('is')} ${fullTitle}${possessive} by?`
+      answer = `The cinematography for ${fullTitle} ${tense('is')} by ${chainAnswer(infobox[key])}.`
       break;
     case "Composer":
       questions = {
-        p: `Who composed its music?`,
-        e: `Who compsed the types music?`
+        p: `Who ${tense('composes')} its music?`,
+        e: `Who ${tense('composes')} the ${type}${possessiveType} music?`
       }
-      question = `Who ${tense('is')} the composer for ${title} by?`
-      answer = `The composer for ${title} ${tense('is')} ${chainAnswer(infobox[key])}.`
+      question = `Who ${tense('composes')} ${fullTitle}${possessive} music?`
+      answer = `${capitalizeFirstLetter(fullTitle)}${possessive} music ${tense('is')} composed by ${chainAnswer(infobox[key])}.`
       break;
     case "Country":
       questions = {
-        p: `What is its country of origin?`,
-        e: `What is the ${type} country of origin?`
+        p: `What country is it from?`,
+        e: `What country is the ${type} from?`
       }
-      question = `What is the country of ${title}?`;
-      answer = `The country of ${title} is ${chainAnswer(infobox[key])}.`;
+      question = `What country is ${fullTitle} from?`;
+      answer = `The country of ${fullTitle} is ${chainAnswer(infobox[key])}.`;
       break;
     case "Country of origin":
       questions = {
         p: `What is its country of origin?`,
-        e: `What is the ${type} country of origin?`
+        e: `What is the ${type}${possessiveType} country of origin?`
       }
-      question = `What is ${title}${possessive} country of origin?`;
-      answer = `${capitalizeFirstLetter(title)}${possessive} country of origin is ${chainAnswer(infobox[key])}.`;
+      question = `What is ${fullTitle}${possessive} country of origin?`;
+      answer = `${capitalizeFirstLetter(fullTitle)}${possessive} country of origin is ${chainAnswer(infobox[key])}.`;
       break;
     case "Created by":
       questions = {
-        p: `Who was it created by?`,
-        e: `Who was the ${type} created by?`
+        p: `Who ${tense('is')} it created by?`,
+        e: `Who ${tense('is')} the ${type} created by?`
       }
-      question = `Who ${tense('is')} ${title} created by?`;
-      answer = `${capitalizeFirstLetter(title)} ${tense('is')} created by ${chainAnswer(infobox[key])}.`;
+      question = `Who ${tense('is')} ${fullTitle} created by?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} created by ${chainAnswer(infobox[key])}.`;
       break;
     case "Directed by":
       questions = {
-        p: `Who was it directed by?`,
-        e: `Who was the ${type} created by?`
+        p: `Who ${tense('directs')} it?`,
+        e: `Who ${tense('directs')} the ${type}?`
       }
-      question = `Who directed ${title}?`;
-      answer = `${capitalizeFirstLetter(title)} ${tense('is')} directed by ${chainAnswer(infobox[key])}.`;
+      question = `Who ${tense('directs')} ${fullTitle}?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} directed by ${chainAnswer(infobox[key])}.`;
       break;
     case "Distributed by":
       questions = {
         p: `What company was it distributed by?`,
-        e: `Waht company was the type distributed by?`
+        e: `What company was the ${type} distributed by?`
       }
-      question = `Who distributed ${title}?`;
-      answer = `${capitalizeFirstLetter(title)} ${tense('is')} distributed by ${chainAnswer(infobox[key])}.`;
+      question = `What company was ${fullTitle} distributed by?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} distributed by ${chainAnswer(infobox[key])}.`;
       break;
     case "Distributor":
       questions = {
-        p: `Who distributed it?`,
-        e: `Who distributed the ${type}?`
+        p: `Who was its distributor?`,
+        e: `Who was the ${type}${possessiveType} distributor?`
       }
-      question = `Who is the distributor for ${title}?`;
-      answer = `The distributor for${title} is ${chainAnswer(infobox[key])}.`;
+      question = `Who was ${fullTitle}${possessive} distributor?`;
+      answer = `The distributor for${fullTitle} is ${chainAnswer(infobox[key])}.`;
       break;
     case "Edited by":
       questions = {
         p: `Who edited it?`,
         e: `Who edited the ${type}?`
       }
-      question = `Who edited ${title}?`;
-      answer = `${capitalizeFirstLetter(title)} ${tense('is')} edited by ${chainAnswer(infobox[key])}.`;
+      question = `Who edited ${fullTitle}?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} edited by ${chainAnswer(infobox[key])}.`;
       break;
     case "Editor":
       questions = {
-        p: `Who edited it?`,
-        e: `Who edited the ${type}?`
+        p: `Who ${tense('is')} the editor for it?`,
+        e: `Who ${tense('is')} the editor for the ${type}?`
       }
-      question = `Who ${tense('is')} the editor for ${title}?`;
-      answer = `The editor for ${title} ${tense('is')} ${chainAnswer(infobox[key])}.`;
+      question = `Who ${tense('is')} the editor for ${fullTitle}?`;
+      answer = `The editor for ${fullTitle} ${tense('is')} ${chainAnswer(infobox[key])}.`;
       break;
     case "English network":
       
       break;
     case "Episodes":
-      
+      questions = {
+        p: `How many episodes does it have?`,
+        e: `How many episodes does the ${type} have?`
+      }
+      question = `How many episodes does ${fullTitle} have?`
+      answer = `${capitalizeFirstLetter(fullTitle)} has ${chainAnswer(infobox[key])} episodes.`
       break;
     case "Executive producer":
       questions = {
-        p: `Who was the executive producer for it?`,
-        e: `Who was the executive producer for the ${type}?`
+        p: `Who ${tense('is')} the executive producer for it?`,
+        e: `Who ${tense('is')} the executive producer for the ${type}?`
       }
-      question = `Who ${tense('is')} the executive producer for ${title}?`;
-      answer = `The executive producer for ${title} ${tense('is')} by ${chainAnswer(infobox[key])}.`;
+      question = `Who ${tense('is')} the executive producer for ${fullTitle}?`;
+      answer = `The executive producer for ${fullTitle} ${tense('is')} by ${chainAnswer(infobox[key])}.`;
       break;
     case "Followed by":
+      questions = {
+        p: `What was it followed by?`,
+        e: `What was the ${type} followed by?`
+      }
+      question = `What was ${fullTitle} followed by?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} was followed by ${chain(infobox[key])}.`
       break;
     case "Genre":
       questions = {
-        p: `What is its genre??`,
-        e: `What is the ${type} genre??`
+        p: `What is its genre?`,
+        e: `What is the ${type}${possessiveType} genre?`
       }
-      question = `What is the ${title} genre?`;
-      answer = `The genre of ${title} is ${chainAnswer(infobox[key])}.`;
+      question = `What is the ${fullTitle} genre?`;
+      answer = `The genre of ${fullTitle} is ${chainAnswer(infobox[key])}.`;
       break;
     case "Language":
       questions = {
-        p: `What language is it in??`,
+        p: `What language is it in?`,
         e: `What language is the ${type} in?`
       }
-      question = `What is the language of ${title}?`;
-      answer = `The language of ${title} is ${chainAnswer(infobox[key])}.`;
+      question = `What is the language of ${fullTitle}?`;
+      answer = `The language of ${fullTitle} is ${chainAnswer(infobox[key])}.`;
       break;
     case "Licensed by":
       
       break;
     case "Music by":
       questions = {
-        p: `Who is its music by??`,
-        e: `Who is the ${type} music by?`
+        p: `Who is its music by?`,
+        e: `Who is the ${type}${possessiveType} music by?`
       }
-      question = `Who ${tense('is')} the music for ${title} by?`;
-      answer = `The music for ${title} ${tense('is')} by ${chainAnswer(infobox[key])}.`;
+      question = `Who ${tense('is')} the music for ${fullTitle} by?`;
+      answer = `The music for ${fullTitle} ${tense('is')} by ${chainAnswer(infobox[key])}.`;
       break;
     case "No. of episodes":
       questions = {
-        p: `How many episodes does it have??`,
+        p: `How many episodes does it have?`,
         e: `How many episodes does the ${type} have?`
       }
-      question = `How many episodes does ${title} have?`;
-      answer = `The number of episodes for ${title} is ${chainAnswer(infobox[key])}.`;
+      question = `How many episodes does ${fullTitle} have?`;
+      answer = `The number of episodes for ${fullTitle} is ${chainAnswer(infobox[key])}.`;
       break;
     case "No. of seasons":
       questions = {
-        p: `How many seasons does it have??`,
+        p: `How many seasons does it have?`,
         e: `How many seasons does the ${type} have?`
       }
-      question = `How many seasons does ${title} have?`;
-      answer = `The number of seasons for ${title} is ${chainAnswer(infobox[key])}.`;
+      question = `How many seasons does ${fullTitle} have?`;
+      answer = `The number of seasons for ${fullTitle} is ${chainAnswer(infobox[key])}.`;
       break;
     case "Opening theme":
       
@@ -444,44 +471,50 @@ for (key in media.infobox) {
         p: `What language is it?`,
         e: `What language is the ${type}?`
       }
-      question = `What was ${title}${possessive} original language?`;
-      answer = `${capitalizeFirstLetter(title)}${possessive} original language was ${chainAnswer(infobox[key])}.`;
+      question = `What was ${fullTitle}${possessive} original language?`;
+      answer = `${capitalizeFirstLetter(fullTitle)}${possessive} original language was ${chainAnswer(infobox[key])}.`;
       break;
     case "Original network":
       questions = {
         p: `What network was it on?`,
         e: `What network was the ${type} on?`
       }
-      question = `What network was ${title} on?`;
-      answer = `${title}${possessive} was on ${chainAnswer(infobox[key])}.`;
+      question = `What network was ${fullTitle} on?`;
+      answer = `${fullTitle}${possessive} was on ${chainAnswer(infobox[key])}.`;
       break;
     case "Original release":
       questions = {
         p: `When was it released?`,
         e: `When was the tye ${type} released?`
       }
-      question = `When was ${title} released?`;
-      answer = `${capitalizeFirstLetter(title)} was released ${isPresent ? infobox[key].join(" ").replace("–", "to the") : infobox[key].join(" ").replace("–", "to")}.`;
+      question = `When was ${fullTitle} released?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} was released ${isPresent ? infobox[key].join(" ").replace("–", " to the ") : infobox[key].join(" ").replace("–", " to ")}.`;
       break;
     case "Original run":
       
       break;
     case "Preceded by":
       questions = {
-        p: `What preceded it??`,
-        e: `What preceded the ${type}?`
+        p: `What was it preceded by?`,
+        e: `What was the ${type} preceded by?`
       }
-      question = `What series was ${title} preceded by?`;
-      answer = `${capitalizeFirstLetter(title)}${possessive} was preceded by ${chainAnswer(infobox[key])}.`;
+      question = `What was ${fullTitle} preceded by?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} was preceded by ${chainAnswer(infobox[key])}.`;
       break;
     case "Picture format":
+      questions = {
+        p: `What is its picture format?`,
+        e: `What is the ${type}${posessiveType} picture format?`
+      }
+      question = `What is ${fullTitle}${possessive} picture format?`
+      answer = `The picture format for ${fullTitle} is ${chainAnswer(infobox[key])}.`
       break;
     case "Produced by":
       questions = {
         p: `Who produced it?`,
         e: `Who produced the ${type}?`
       }
-      question = `Who produced ${title}?`;
+      question = `Who produced ${fullTitle}?`;
       answer = `${capitalizeFirstLetter(title)} ${tense('is')} produced by ${chainAnswer(infobox[key])}.`;
       break;
     case "Producer":
@@ -489,93 +522,104 @@ for (key in media.infobox) {
         p: `Who produced it?`,
         e: `Who produced the ${type}?`
       }
-      question = `Who ${tense('is')} the producer for ${title}?`;
-      answer = `The producer for ${capitalizeFirstLetter(title)} ${tense('is')} ${chainAnswer(infobox[key])}.`;
+      question = `Who produced ${fullTitle}?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} produced by ${chainAnswer(infobox[key])}.`;
       break;
     case "Production companies":
       questions = {
-        p: `?`,
-        e: `?`
+        p: `What company produced it?`,
+        e: `What company produced the ${type}?`
       }
-      // lines.push(
-      //   `What company produced ${the}${title}?\t${
-      //     the.charAt(0).toUpperCase() + the.slice(1)
-      //   }${title} was produced by ${chainAnswer(answer)}.\t${source}`
-      // );
+      question = `What company produced ${fullTitle}?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} produced by ${chainAnswer(infobox[key])}.`
       break;
     case "Production company":
       questions = {
         p: `What company produced it?`,
         e: `What company produced the ${type}?`
       }
-      question = `What company produced ${title}?`;
-      answer = `${capitalizeFirstLetter(title)} ${tense('is')} produced by ${chainAnswer(infobox[key])}.`;
+      question = `What company produced ${fullTitle}?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} produced by ${chainAnswer(infobox[key])}.`;
       break;
     case "Production location":
       questions = {
         p: `Where was it produced?`,
         e: `Where was the ${type} produced?`
       }
-      question = `Where ${tense('is')} ${title} produced?`;
-      answer = `${capitalizeFirstLetter(title)} ${tense('is')} produced in ${chainAnswer(infobox[key])}.`;
+      question = `Where was ${fullTitle} produced?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} produced in ${chainAnswer(infobox[key])}.`;
       break;
     case "Related shows":
       questions = {
         p: `What shows are related to it?`,
         e: `What shows are related to the ${type}?`
       }
-      question = `What is a show that's related to ${title}?`;
-      answer = `${capitalizeFirstLetter(title)} is related to the ${chainAnswer(infobox[key])}.`;
+      question = `What show are related to ${fullTitle}?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} is related to the ${chainAnswer(infobox[key])}.`;
       break;
     case "Release date":
       questions = {
         p: `When was it released?`,
         e: `When was the ${type} released?`
       }
-      question = `When was ${title} released?`;
-      answer = `${capitalizeFirstLetter(title)} was released on ${chainAnswer(infobox[key])}.`;
+      question = `When was ${fullTitle} released?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} was released on ${chainAnswer(infobox[key])}.`;
       break;
     case "Running time":
       questions = {
         p: `What is its running time?`,
-        e: `What is the ${type} running time?`
+        e: `What is the ${type}${possessiveType} running time?`
       }
-      question = `What is the running time of ${title}?`;
-      answer = `The running time of ${title} is ${chainAnswer(infobox[key])}.`;
+      question = `What is the running time of ${fullTitle}?`;
+      answer = `The running time of ${fullTitle} is ${chainAnswer(infobox[key])}.`;
       break;
     case "Screenplay by":
-      
+      questions = {
+        p: `Who wrote its screenplay?`,
+        e: `Who wrote the ${type}${possessiveType} screenplay?`
+      }
+      question = `What is the running time of ${fullTitle}?`;
+      answer = `The running time of ${fullTitle} is ${chainAnswer(infobox[key])}.`;
       break;
     case "Starring":
       questions = {
         p: `Who starred in it?`,
         e: `Who starred in the ${type}?`
       }
-      question = `Who starred in ${title}?`;
-      answer = `${capitalizeFirstLetter(title)} stars ${chainAnswer(infobox[key])}.`;
+      question = `Who starred in ${fullTitle}?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} stars ${chainAnswer(infobox[key])}.`;
       break;
     case "Studio":
-      
+      questions = {
+        p: `What studio worked on it?`,
+        e: `What studio worked on the ${type}?`
+      }
+      question = `What studio worked on ${fullTitle}?`
+      answer = ``
       break;
     case "Written by":
       questions = {
         p: `Who wrote it?`,
         e: `Who wrote the ${type}?`
       }
-      question = `Who wrote ${title}?`;
-      answer = `${capitalizeFirstLetter(title)} ${tense('is')} written by ${chainAnswer(infobox[key])}.`;
+      question = `Who wrote ${fullTitle}?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} written by ${chainAnswer(infobox[key])}.`;
       break;
     default:
       console.log(`Error:\t${key} is unaccounted for.\tSend help!`)
   }
 
     if (questions && question && answer && source) {
-      var obj = {};
-      for (qKey in questions) {
-        obj[qKey] = [questions[qKey], question, answer, source].join("\t");
+      if (mcmode) {
+        var obj = {};
+        for (qKey in questions) {
+          obj[qKey] = [questions[qKey], question, answer, source].join("\t");
 
+        }
+        lines.push(obj)
+      } else {
+        lines.push([question, answer, source].join("\t"));
       }
-      lines.push(obj)
     }
 }
 
@@ -592,10 +636,16 @@ function shuffleArray(array) {
 var output = [];
 
 lines.forEach(arr => {
-  for (line in arr) {
-    output.push(arr[line])
+  if (mcmode) {
+    for (line in arr) {
+      output.push(arr[line])
+    }
+  } else {
+    output.push(arr)
   }
 })
+
+// console.log(media);
 
 console.log(output.join("\n"));
 
