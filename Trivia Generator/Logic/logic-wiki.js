@@ -446,7 +446,7 @@ for (key in media.infobox) {
         p: `Who ${tense('is')} its music by?`,
         e: `Who ${tense('is')} the ${type}${possessiveType} music by?`
       }
-      question = `Who ${tense('is')} ${fullTitle}${possessive} msuic by?`;
+      question = `Who ${tense('is')} ${fullTitle}${possessive} music by?`;
       answer = `The music for ${fullTitle} ${tense('is')} by ${chainAnswer(infobox[key])}.`;
       break;
     case "No. of episodes":
