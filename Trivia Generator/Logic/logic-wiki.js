@@ -607,7 +607,7 @@ for (key in media.infobox) {
         e: `What studio worked on the ${type}?`
       }
       question = `What studio worked on ${fullTitle}?`
-      answer = `${capitalizeFirstLetter(fullTitle)} was animated by ${chainAnswer(infokey[key])}.`
+      answer = `${capitalizeFirstLetter(fullTitle)} was animated by ${chainAnswer(infobox[key])}.`
       break;
     case "Written by":
       questions = {
