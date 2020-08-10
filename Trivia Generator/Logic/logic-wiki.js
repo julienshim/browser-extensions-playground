@@ -403,7 +403,7 @@ for (key in media.infobox) {
         e: `How many episodes does the ${type} have?`
       }
       question = `How many episodes does ${fullTitle} have?`
-      answer = `${capitalizeFirstLetter(fullTitle)} has ${chainAnswer(infobox[key])} episodes.`
+      answer = `${capitalizeFirstLetter(fullTitle)} has ${chainAnswer(infobox[key]).replace(' (List of episodes)', '')} episodes.`
       break;
     case "Executive producer":
       questions = {
