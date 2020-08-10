@@ -306,7 +306,7 @@ for (key in media.infobox) {
         e: `What ${tense('is')} the ${type}${possessiveType} budget?`
       }
       question = `What ${tense('is')} ${fullTitle}${possessive} budget?`;
-      answer = `The budget of ${fullTitle} ${tense('is')} ${chainAnswer(infobox[key])}.`
+      answer = `The budget of ${fullTitle} ${tense('is')} ${chainAnswer(infobox[key]).split('[')[0]}.`
       break;
     case "Cantonese":
       // Skipped
