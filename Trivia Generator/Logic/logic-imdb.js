@@ -559,7 +559,8 @@ for (key in imdb) {
         e: `What is the ${type}${possessive} plot?`
       };
       question = `What is ${fullTitle}${possessiveTitle} plot?`;
-      answer = `${chain(imdb['Plot'])}`;
+      answer = `${chain(imdb['Plot']).split(/\n/)[0]}`;
+      console.log(chain(imdb['Plot']))
       break;
     case "Production Co":
       questions = {
