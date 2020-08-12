@@ -544,7 +544,7 @@ for (key in imdb) {
     case "Motion Picture Rating (MPAA)":
       questions = {
         p: `What is its movie rating?`,
-        e: `Where is the ${type}${possessive} movie rating?`
+        e: `What is the ${type}${possessive} movie rating?`
       }
       question = `What is ${fullTitle}${possessiveTitle} movie rating?`;
       answer = `${capitalizeFirstLetter(fullTitle)} is rated ${chain(imdb['Motion Picture Rating (MPAA)'].hasOwnProperty('Detailed') ? imdb['Motion Picture Rating (MPAA)'].Detailed : imdb['Motion Picture Rating (MPAA)'].Short )}.`;
