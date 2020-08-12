@@ -428,9 +428,9 @@ for (key in imdb) {
       : imdb["Title"]
   );
   var possessive = type[type.length - 1] === "s" ? "'" : "'s";
+  var fullTitle = formatTitle(title, type, fullType[0]);
   var possessiveTitle =
-    title.split(" (")[0][title.split(" (")[0].length - 1] === "s" ? "'" : "'s";
-  console.log(title, possessiveTitle, title.split(" (")[0][title.split(" (")[0].length - 1])
+    fullTitle.split(" (")[0][fullTitle.split(" (")[0].length - 1] === "s" ? "'" : "'s";
   var isInProduction =
     !!chain(fullType).match(/\(\d{4}–\s\)/) && !fullType[0].includes("Mini");
   var fullTitle = formatTitle(title, type, fullType[0]);
