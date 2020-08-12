@@ -430,7 +430,7 @@ for (key in imdb) {
   var possessive = type[type.length - 1] === "s" ? "'" : "'s";
   var fullTitle = formatTitle(title, type, fullType[0]);
   var possessiveTitle =
-    fullTitle.split(" (")[0][fullTitle.split(" (")[0].length - 1] === "s" ? "'" : "'s";
+    fullTitle[fullTitle.length - 1] === "s" ? "'" : "'s";
   var isInProduction =
     !!chain(fullType).match(/\(\d{4}–\s\)/) && !fullType[0].includes("Mini");
   var fullTitle = formatTitle(title, type, fullType[0]);
