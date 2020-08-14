@@ -474,7 +474,7 @@ for (key in imdb) {
         e: `What is the ${type}${possessive} country of origin?`
       };
       question = `What is ${fullTitle}${possessiveTitle} country of origin?`;
-      answer = `The country of origin of ${fullTitle} is ${formatLocation(chain(imdb['Country']), true)}.`;
+      answer = `The country of ${fullTitle} is ${formatLocation(chain(imdb['Country']), true)}.`;
       break;
     case "Creator":
         questions = {
