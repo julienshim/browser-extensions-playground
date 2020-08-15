@@ -12,14 +12,24 @@ children.forEach(chatmessage => {
   var [user, message] = chatmessage.innerText.split(/\n/)
   if (!!message.match(/[a-z]/gi)) {
     if(users[user]) {
+      var obj = {
+        msg: message.trim(),
+        keyword: [...message.match(/[a-z]{1,}/gi)].map(x => x.toLowerCase())
+
+      }
       users[user] = {
         count: users[user].count += 1,
-        msgs: [...users[user].msgs, message.trim()]
+        msgs: [...users[user].msgs, obj],
       }
     } else {
+      var newObj = {
+        msg: message.trim(),
+        keyword: [...message.match(/[a-z]{1,}/gi)].map(x => x.toLowerCase())
+
+      }
       users[user] = {
         count: 1, 
-        msgs: [message.trim()]
+        msgs: [newObj]
       }
     }
   }
@@ -29,11 +39,42 @@ children.forEach(chatmessage => {
   }
 })
 
+var wordArr = []
 
 // Words become arr of unique words
-words = [new Set(words)]
+words = [...new Set(words)].sort();
 
-console.log(users);
+// console.log(users)
+
+var analysis = [];
+
+words.forEach(word => {
+  var obj = {
+    keyword: word,
+    chatter: []
+    // tags: []
+  }
+
+  for (user in users) {
+    users[user].msgs.forEach(milk => {
+      var {keyword, msg} = milk;
+      if(keyword.includes(word)) {
+        obj.chatter.push(`${user}: ${msg}`);
+        // var newKeys = keyword.filter(x => x !== keyword && x.length > 2);
+        // obj.tags.push(...newKeys);
+      };
+    })
+  }
+  obj.count = obj.chatter.length;
+  analysis.push(obj);
+})
+
+console.log(analysis.sort((a,b) => b.count - a.count).filter(x => x.count > 0));
+
+
+
+// console.log(wordArr.filter(x => x.count > 9));
+// console.log(users);
 console.log(words);
 
 
