@@ -308,6 +308,7 @@ for (key in media.infobox) {
       question = `What ${tense('is')} ${fullTitle}${possessive} budget?`;
       answer = `The budget of ${fullTitle} ${tense('is')} ${chainAnswer(infobox[key]).split('[')[0]}.`
       break;
+    // case "Camera setup":
     case "Cantonese":
       // Skipped
       break;
@@ -449,6 +450,7 @@ for (key in media.infobox) {
       question = `Who ${tense('is')} ${fullTitle}${possessive} music by?`;
       answer = `The music for ${fullTitle} ${tense('is')} by ${chainAnswer(infobox[key])}.`;
       break;
+    // case "Narrated by":
     case "No. of episodes":
       questions = {
         p: `How many episodes does it have?`,
@@ -521,6 +523,7 @@ for (key in media.infobox) {
       question = `What is ${fullTitle}${possessive} picture format?`
       answer = `The picture format for ${fullTitle} is ${chainAnswer(infobox[key])}.`
       break;
+    // case "Presented by":
     case "Produced by":
       questions = {
         p: `Who produced it?`,
@@ -609,6 +612,7 @@ for (key in media.infobox) {
       question = `What studio worked on ${fullTitle}?`
       answer = `${capitalizeFirstLetter(fullTitle)} was animated by ${chainAnswer(infobox[key])}.`
       break;
+    // case "Theme music composer":
     case "Written by":
       questions = {
         p: `Who wrote it?`,
