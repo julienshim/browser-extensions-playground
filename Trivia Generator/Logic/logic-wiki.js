@@ -61,7 +61,7 @@ function revealMediaType(p) {
       return "anime";
       break;
     case pLow.includes("television series") ||
-      (pLow.includes("television") && pLow.includes("drama")):
+      (pLow.includes("television") || pLow.includes("drama")):
       return "television series";
       break;
     case pLow.includes("film"):
