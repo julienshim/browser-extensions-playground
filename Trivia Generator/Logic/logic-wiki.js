@@ -412,7 +412,7 @@ for (key in media.infobox) {
         e: `Who ${tense('is')} the executive producer for the ${type}?`
       }
       question = `Who ${tense('is')} the executive producer for ${fullTitle}?`;
-      answer = `The executive producer for ${fullTitle} ${tense('is')} by ${chainAnswer(infobox[key])}.`;
+      answer = `The executive producer for ${fullTitle} ${tense('is')} ${chainAnswer(infobox[key])}.`;
       break;
     case "Followed by":
       questions = {
