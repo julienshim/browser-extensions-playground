@@ -61,7 +61,8 @@ function revealMediaType(p) {
       return "anime";
       break;
     case (pLow.includes("television series") ||
-      (pLow.includes("television") || pLow.includes("drama")) || document.querySelector("#catlinks").innerText.includes('television')) && !document.querySelector("#catlinks").innerText.includes('film'):
+      ((pLow.includes("television") || pLow.includes("drama")) || document.querySelector("#catlinks").innerText.includes('television')) 
+      && !document.querySelector("#catlinks").innerText.includes('film')):
       return "television series";
       break;
     case pLow.includes("film"):
@@ -70,8 +71,16 @@ function revealMediaType(p) {
   }
 }
 
-var introParagraph = document.querySelector(".infobox").nextElementSibling
-  .textContent;
+// Capture Rotten Tomatoes
+
+var raw = [...document.querySelectorAll("p")].map(paragraph => paragraph.textContent);
+if (raw.filter(contents => contents.includes('Rotten Tomatoes')).length > 0) {
+  media.infobox['Rotten Tomatoes'] = [`${raw.filter(contents => contents.includes('Rotten Tomatoes'))[0].split(". ").filter(x => x.includes('Rotten Tomatoes'))[0]}.`]
+}
+
+// Checks for no infobox
+var introParagraph = document.querySelector(".infobox") ? document.querySelector(".infobox").nextElementSibling.textContent : document.querySelector('div.mw-parser-output > p:nth-child(2)').textContent;
+
 media.type = revealMediaType(introParagraph);
 
 // Capture the media title and format if applicable.
@@ -156,7 +165,7 @@ function chainTensedAnswer(array) {
 function splitBy(array) {
   var temp = [];
   var n = 0;
-  for (let i = 0; i < array.length - 1; i++) {
+  for (let i = 0; i < array.length; i++) {
     temp[n] = temp[n] ? (temp[n] += `\n${array[i]}`) : array[i];
     if (array[i + 2] && array[i + 2].includes("by ")) {
       n += 1;
@@ -308,7 +317,8 @@ for (key in media.infobox) {
       question = `What ${tense('is')} ${fullTitle}${possessive} budget?`;
       answer = `The budget of ${fullTitle} ${tense('is')} ${chainAnswer(infobox[key]).split('[')[0]}.`
       break;
-    // case "Camera setup":
+    case "Camera setup":
+      // Skipped
     case "Cantonese":
       // Skipped
       break;
@@ -450,7 +460,14 @@ for (key in media.infobox) {
       question = `Who ${tense('is')} ${fullTitle}${possessive} music by?`;
       answer = `The music for ${fullTitle} ${tense('is')} by ${chainAnswer(infobox[key])}.`;
       break;
-    // case "Narrated by":
+    case "Narrated by":
+      questions = {
+        p: `Who ${tense('is')} it narrated by?`,
+        e: `Who ${tense('is')} the ${type} narrated by?`
+      }
+      question = `Who ${tense('is')} ${fullTitle} narrated by?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} was narrated by ${chainAnswer(infobox[key])}.`;
+      break;
     case "No. of episodes":
       questions = {
         p: `How many episodes does it have?`,
@@ -467,6 +484,14 @@ for (key in media.infobox) {
       question = `How many seasons does ${fullTitle} have?`;
       answer = `The number of seasons for ${fullTitle} is ${chainAnswer(infobox[key])}.`;
       break;
+    case "No. of series":
+        questions = {
+          p: `How many series did it run for?`,
+          e: `How many series did the ${type} run for?`
+        }
+        question = `How many series did ${fullTitle} run for?`;
+        answer = `The number of series for ${fullTitle} is ${chainAnswer(infobox[key])}.`;
+        break;
     case "Opening theme":
       questions = {
         p: `What is its opening theme?`,
@@ -523,7 +548,14 @@ for (key in media.infobox) {
       question = `What is ${fullTitle}${possessive} picture format?`
       answer = `The picture format for ${fullTitle} is ${chainAnswer(infobox[key])}.`
       break;
-    // case "Presented by":
+    case "Presented by":
+      questions = {
+        p: `Who ${tense("is")} it presented by?`,
+        e: `Who ${tense("is")} the ${type} presented by?`
+      }
+      question = `Who ${tense("is")} ${fullTitle} presented by?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} presented by ${chainAnswer(infobox[key])}.`;
+      break;
     case "Produced by":
       questions = {
         p: `Who produced it?`,
@@ -580,6 +612,17 @@ for (key in media.infobox) {
       question = `When was ${fullTitle} released?`;
       answer = `${capitalizeFirstLetter(fullTitle)} was released on ${chainAnswer(infobox[key])}.`;
       break;
+    case "Rotten Tomatoes":
+      questions = {
+        p: `What is its Rotten Tomatoes score?`,
+        e: `What is the ${type}${possessiveType} Rotten Tomatoes score?`
+      }
+      question = `What is ${fullTitle}${possessive} Rotten Tomatoes score?`
+      answer = `${chainAnswer(infobox[key])}`.replace('/', ' out of ')
+        .replace('The film', capitalizeFirstLetter(fullTitle))
+        .replace('the film', fullTitle)
+        .replace(' it ', ` ${fullTitle} `);
+      break;
     case "Running time":
       questions = {
         p: `What is its running time?`,
@@ -604,6 +647,14 @@ for (key in media.infobox) {
       question = `Who starred in ${fullTitle}?`;
       answer = `${capitalizeFirstLetter(fullTitle)} stars ${chainAnswer(infobox[key])}.`;
       break;
+    case "Story by":
+      questions = {
+        p: `Who was its story by?`,
+        e: `Who was the ${type}${possessiveType} story by?`
+      }
+      question = `Who was ${fullTitle}${possessive} story by?`;
+      answer = `The story for ${fullTitle} was by ${chainAnswer(infobox[key])}.`;
+      break;
     case "Studio":
       questions = {
         p: `What studio worked on it?`,
@@ -612,7 +663,21 @@ for (key in media.infobox) {
       question = `What studio worked on ${fullTitle}?`
       answer = `${capitalizeFirstLetter(fullTitle)} was animated by ${chainAnswer(infobox[key])}.`
       break;
-    // case "Theme music composer":
+    case "Theme music composer":
+      questions = {
+        p: `Who composed its theme music?`,
+        e: `Who composed the ${type}${possessiveType} theme music?`
+      }
+      question = `Who composed ${fullTitle}${possessive} theme music?`
+      answer = `The theme music for ${fullTitle} was composed by ${chainAnswer(infobox[key])}.`;
+    case "Voices of":
+      questions = {
+        p: `Whose voices did it feature?`,
+        e: `Whose voices did the ${type} feature?`
+      }
+      question = `Whose voices did ${fullTitle} feature?`;
+      answer = `${capitalizeFirstLetter(fullTitle)} featured the voices of ${chainAnswer(infobox[key])}.`;
+      break;
     case "Written by":
       questions = {
         p: `Who wrote it?`,
