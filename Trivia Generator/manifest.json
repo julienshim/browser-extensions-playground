@@ -6,7 +6,7 @@
     {
       "matches": [
         "https://en.wikipedia.org/wiki/*",
-        "https://www.imdb.com/title/"
+        "https://www.imdb.com/title/tt*"
       ],
       "js": ["content.js"]
     }
