@@ -1,4 +1,4 @@
-console.clear()
+console.clear();
 console.log("Browser extension running");
 
 var mcmode = false;
@@ -749,11 +749,11 @@ const wmc = () => {
         break;
       case "Screenplay by":
         questions = {
-          p: `Who wrote its screenplay?`,
-          e: `Who wrote the ${type}${possessiveType} screenplay?`,
+          p: `Who was its screenplay by?`,
+          e: `Who was the ${type}${possessiveType} screenplay by?`,
         };
-        question = `Who wrote ${fullTitle}${possessive} screenplay?`;
-        answer = `The screenplay for ${fullTitle} was written by ${chainAnswer(
+        question = `Who was ${fullTitle}${possessive} screenplay by?`;
+        answer = `The screenplay for ${fullTitle} was by ${chainAnswer(
           infobox[key]
         )}.`;
         break;
@@ -907,7 +907,7 @@ const imc = () => {
     USA: "United States",
     UK: "United Kingdom",
   };
-  
+
   var pluralCountries = {
     "United States": true,
     France: false,
@@ -928,7 +928,7 @@ const imc = () => {
     "Trinidad and Tobago": false,
     Nepal: false,
   };
-  
+
   var imdbGenres = [
     "Action",
     "Animation",
@@ -965,7 +965,7 @@ const imc = () => {
   ];
   var imdb = {};
   var capturePoint, el, capturedData;
-  
+
   // Capture Plot, Director, Writers, Stars
   capturePoint = document.querySelector("div.summary_text");
   el = capturePoint;
@@ -974,7 +974,7 @@ const imc = () => {
     capturedData.push(el.innerText);
     el = el.nextElementSibling;
   }
-  
+
   capturedData.forEach((data, i) => {
     var format = {
       0: `Plot: <DO NOT USE THIS VALUE>`,
@@ -987,7 +987,7 @@ const imc = () => {
     imdb[key] =
       key === "Plot" ? [data.split(" See full summary")[0]] : value.split(", ");
   });
-  
+
   // Capture Title, Rating, Time, Genre, Release
   capturedData = document
     .querySelector("div.title_wrapper")
@@ -1012,33 +1012,33 @@ const imc = () => {
           imdb["Title"] = [front];
         }
       }
-      if(data.includes(', ')) {
-        var [title, genres] = data.split(/\n/)
-        imdb['Title'] = [title];
+      if (data.includes(", ")) {
+        var [title, genres] = data.split(/\n/);
+        imdb["Title"] = [title];
         genres = genres.split(", ");
         genres.forEach((genre) => {
-          if(imdb.hasOwnProperty('Genre')) {
+          if (imdb.hasOwnProperty("Genre")) {
             if (imdbGenres.includes(genre)) {
-              if (!imdb['Genre'].includes(genre)){
-                imdb["Genre"] = [...imdb['Genre'], genre];
+              if (!imdb["Genre"].includes(genre)) {
+                imdb["Genre"] = [...imdb["Genre"], genre];
               }
             } else {
-                console.error(`${genre} should be added to the genre list!`)
+              console.error(`${genre} should be added to the genre list!`);
             }
           } else {
-              if (imdbGenres.includes(genre)) {
-                imdb['Genre'] = [genre]
-              } else {
-                console.error(`${genre} should be added to the genre list!`)
-              }
+            if (imdbGenres.includes(genre)) {
+              imdb["Genre"] = [genre];
+            } else {
+              console.error(`${genre} should be added to the genre list!`);
+            }
           }
         });
       }
-      if(data.split(/\s{2}/)[0].includes('Approved')) {
-        imdb['Title'] = [data.split(/\s{2,}/)[0].split(/\n/)[0]];
+      if (data.split(/\s{2}/)[0].includes("Approved")) {
+        imdb["Title"] = [data.split(/\s{2,}/)[0].split(/\n/)[0]];
       }
       if (imdbGenres.includes(data.split(/\s{2,}/)[0].split(/\n/)[1])) {
-        imdb['Title'] = [data.split(/\s{2,}/)[0].split(/\n/)[0]];
+        imdb["Title"] = [data.split(/\s{2,}/)[0].split(/\n/)[0]];
         imdb["Genre"] = [data.split(/\s{2,}/)[0].split(/\n/)[1]];
       }
       if (imdbGenres.includes(data.split(/\s{2,}/)[1])) {
@@ -1092,20 +1092,20 @@ const imc = () => {
     } else if (data.includes(",")) {
       var genres = data.split(", ");
       genres.forEach((genre) => {
-        if(imdb.hasOwnProperty('Genre')) {
+        if (imdb.hasOwnProperty("Genre")) {
           if (imdbGenres.includes(genre)) {
-            if (!imdb['Genre'].includes(genre)){
-              imdb["Genre"] = [...imdb['Genre'], genre];
+            if (!imdb["Genre"].includes(genre)) {
+              imdb["Genre"] = [...imdb["Genre"], genre];
             }
           } else {
-              console.error(`${genre} should be added to the genre list!`)
+            console.error(`${genre} should be added to the genre list!`);
           }
         } else {
-            if (imdbGenres.includes(genre)) {
-              imdb['Genre'] = [genre]
-            } else {
-              console.error(`${genre} should be added to the genre list!`)
-            }
+          if (imdbGenres.includes(genre)) {
+            imdb["Genre"] = [genre];
+          } else {
+            console.error(`${genre} should be added to the genre list!`);
+          }
         }
       });
       temp = format["Genre"];
@@ -1123,7 +1123,7 @@ const imc = () => {
       imdb[key] = [value];
     }
   });
-  
+
   // IMDb User Rating
   capturedData =
     document.querySelector("div.ratings_wrapper") &&
@@ -1136,11 +1136,11 @@ const imc = () => {
     if (rating && users) {
       imdb["Rating"] = {
         "Average Rating": [rating.replace("/", " / ")],
-        "No. of Users": [users]
+        "No. of Users": [users],
       };
     }
   }
-  
+
   // MPAA Rating, Expanded Genre, and Storyline
   capturePoint = document.querySelector("#titleStoryLine > h2");
   capturedData = [];
@@ -1149,7 +1149,7 @@ const imc = () => {
     capturedData.push(el.innerText);
     el = el.nextElementSibling;
   }
-  
+
   capturedData.forEach((data, i) => {
     if (data.includes("MPAA")) {
       var [key, value] = data.split(/\n/);
@@ -1168,26 +1168,25 @@ const imc = () => {
     if (data.includes("Genres")) {
       var genres = data.split(/:\s{0,}/)[1].split(" | ");
       genres.forEach((genre) => {
-        if(imdb.hasOwnProperty('Genre')) {
+        if (imdb.hasOwnProperty("Genre")) {
           if (imdbGenres.includes(genre)) {
-              if (!imdb['Genre'].includes(genre)) {
-               imdb["Genre"] = [...imdb['Genre'], genre];
-              }
-              
+            if (!imdb["Genre"].includes(genre)) {
+              imdb["Genre"] = [...imdb["Genre"], genre];
+            }
           } else {
-              console.error(`${genre} should be added to the genre list!`)
+            console.error(`${genre} should be added to the genre list!`);
           }
         } else {
-            if (imdbGenres.includes(genre)) {
-              imdb['Genre'] = [genre]
-            } else {
-              console.error(`${genre} should be added to the genre list!`)
-            }
+          if (imdbGenres.includes(genre)) {
+            imdb["Genre"] = [genre];
+          } else {
+            console.error(`${genre} should be added to the genre list!`);
+          }
         }
       });
     }
   });
-  
+
   // Capture Country, Language, Release Date, AKA, Filming Locations, Budget, Opening Weekend, Gross, Cumulative Worldwide Gross, Production Co, Runtime, Sound Mix, Color, Aspect Ratio
   capturePoint = document.querySelector("#titleDetails > h2");
   el = capturePoint;
@@ -1196,7 +1195,7 @@ const imc = () => {
     capturedData.push(el.innerText);
     el = el.nextElementSibling;
   }
-  
+
   capturedData.forEach((data, i) => {
     if (data.includes(":") && !data.includes("Official Sites")) {
       if (data.includes("Aspect Ratio")) {
@@ -1211,7 +1210,10 @@ const imc = () => {
       } else {
         var [key, value] = data.split(/:\s{0,}/);
         value = [value.split(/ See full summary| See more/)[0]];
-        if (!!value[0].match(/\, | \| /) && !key.includes("Filming Locations")) {
+        if (
+          !!value[0].match(/\, | \| /) &&
+          !key.includes("Filming Locations")
+        ) {
           value = value[0].split(/, | \| /);
         }
         if (key.includes("Opening Weekend USA")) {
@@ -1231,16 +1233,16 @@ const imc = () => {
     // var [key, value] = temp.split(/:\s{0,}/);
     // imdb[key] = key === "Plot" ? [data.split(' See full summary')[0]] : value.split(", ");
   });
-  
+
   //Capture Source
   capturedData = window.location.href.match(
     /https:\/\/www.imdb.com\/title\/tt+\d{1,}/
   )[0];
   imdb["URL"] = [capturedData];
-  
+
   // Questions container
   var lines = [];
-  
+
   for (key in imdb) {
     function chain(array) {
       var length = array.length;
@@ -1256,94 +1258,106 @@ const imc = () => {
         }`;
       }
     }
-  
+
     function formatTitle(title, type) {
-      var temp = title
-        .replace(/– \)|–\d{4}\)|\)/, "")
-        .split(/[\s]{1,}\(/);
-        var [title, year] = temp;
-        return ["the", year, type, title].join(" ");
-  
+      var temp = title.replace(/– \)|–\d{4}\)|\)/, "").split(/[\s]{1,}\(/);
+      var [title, year] = temp;
+      return ["the", year, type, title].join(" ");
     }
-  
+
     function formatReleaseDate(datelocale) {
-      var [date, locale] = datelocale.replace(')', '').split(/\s{1}\(/);
+      var [date, locale] = datelocale.replace(")", "").split(/\s{1}\(/);
       if (countryConverstion.hasOwnProperty(locale)) {
         locale = countryConverstion[locale];
       }
-      return `in ${locale} on ${date}`
+      return `in ${locale} on ${date}`;
     }
-  
+
     function capitalizeFirstLetter(string) {
       return string.charAt(0).toUpperCase() + string.slice(1);
     }
-  
+
     function lowercaseFirstLetter(string) {
       return string.charAt(0).toLowerCase() + string.slice(1);
     }
-  
+
     function formatRunTime(time) {
-        if (!!time.match(/minutes|minute|hour|hours/)) {
-          if (!!time.match(/1 hours|1 minutes/) && !time.match(/\d{2,} hours|\d{2,} minutes/)) {
-            return time.replace('1 hours', '1 hour').replace('1 minutes', '1 minute');
-          }
-          return time;
+      if (!!time.match(/minutes|minute|hour|hours/)) {
+        if (
+          !!time.match(/1 hours|1 minutes/) &&
+          !time.match(/\d{2,} hours|\d{2,} minutes/)
+        ) {
+          return time
+            .replace("1 hours", "1 hour")
+            .replace("1 minutes", "1 minute");
         }
-      var temp = time;
-      if(!!time.match(/1h\s{0,}/) && !time.match(/\d{2,}h\s{0,}/)) {
-        temp = temp.replace('h', ' hour')
-      } else {
-        temp = temp.replace('h', ' hours')
+        return time;
       }
-      if(!!time.match(/1min\s{0,}/) && !time.match(/\d{2,}min\s{0,}/)) {
-        temp = temp.replace('min', ' minute')
+      var temp = time;
+      if (!!time.match(/1h\s{0,}/) && !time.match(/\d{2,}h\s{0,}/)) {
+        temp = temp.replace("h", " hour");
       } else {
-        temp = temp.replace('min', ' minutes')
+        temp = temp.replace("h", " hours");
+      }
+      if (!!time.match(/1min\s{0,}/) && !time.match(/\d{2,}min\s{0,}/)) {
+        temp = temp.replace("min", " minute");
+      } else {
+        temp = temp.replace("min", " minutes");
       }
       return temp;
     }
-  
+
     function formatLocation(location, isRunning) {
       if (isRunning) {
-      return location.replace('USA', 'the United States').replace('UK', 'the United Kingdom');
+        return location
+          .replace("USA", "the United States")
+          .replace("UK", "the United Kingdom");
       }
-      return location.replace('USA', 'United States').replace('UK', 'United Kingdom');
-  
+      return location
+        .replace("USA", "United States")
+        .replace("UK", "United Kingdom");
     }
-  
+
     var questions = undefined;
     var question = undefined;
     var answer = undefined;
     var source = chain(imdb["URL"]);
     var fullType = imdb.hasOwnProperty("Type")
       ? imdb["Type"]
-      : [`Film ${imdb['Title'][0].match(/\(\d{4}- \)|\(\d{4}\)|\(\d{4}–\d{4}\)/)[0]}`];
+      : [
+          `Film ${
+            imdb["Title"][0].match(/\(\d{4}- \)|\(\d{4}\)|\(\d{4}–\d{4}\)/)[0]
+          }`,
+        ];
     var type = chain(fullType)
       .split(" (")[0]
       .replace("TV", "Television")
       .toLowerCase();
     var title = chain(
       type !== "film"
-        ? [`${imdb["Title"]} ${chain(imdb['Type'][0].match(/\(\d{4}– \)|\(\d{4}\)|\(\d{4}–\d{4}\)/))}`]
+        ? [
+            `${imdb["Title"]} ${chain(
+              imdb["Type"][0].match(/\(\d{4}– \)|\(\d{4}\)|\(\d{4}–\d{4}\)/)
+            )}`,
+          ]
         : imdb["Title"]
     );
     var possessive = type[type.length - 1] === "s" ? "'" : "'s";
     var fullTitle = formatTitle(title, type, fullType[0]);
-    var possessiveTitle =
-      fullTitle[fullTitle.length - 1] === "s" ? "'" : "'s";
+    var possessiveTitle = fullTitle[fullTitle.length - 1] === "s" ? "'" : "'s";
     var isInProduction =
       !!chain(fullType).match(/\(\d{4}–\s\)/) && !fullType[0].includes("Mini");
     var fullTitle = formatTitle(title, type, fullType[0]);
-  
+
     function tense(string) {
       var past = {
-        "is": "was",
-        "stars": "starred",
-        "directs": 'directed'
+        is: "was",
+        stars: "starred",
+        directs: "directed",
       };
       return isInProduction ? string : past[string];
     }
-  
+
     switch (key) {
       case "Also Known As":
         break;
@@ -1355,13 +1369,13 @@ const imc = () => {
               .split(" (")[0]
               .replace(/EUR/, "€")}`
           : chain(imdb.Budget).replace(/EUR/, "€");
-  
-        if (budget.includes('SEK')) {
-          budget = `${budget.replace('SEK', "")} kronor`
+
+        if (budget.includes("SEK")) {
+          budget = `${budget.replace("SEK", "")} kronor`;
         }
         questions = {
           p: `What ${tense("is")} its budget?`,
-          e: `What ${tense("is")} the ${type}${possessive} budget?`
+          e: `What ${tense("is")} the ${type}${possessive} budget?`,
         };
         question = `What ${tense("is")} ${fullTitle}${possessiveTitle} budget?`;
         answer = `The budget of ${fullTitle} ${tense("is")} ${budget}.`;
@@ -1371,32 +1385,35 @@ const imc = () => {
       case "Country":
         questions = {
           p: `What is its country of origin?`,
-          e: `What is the ${type}${possessive} country of origin?`
+          e: `What is the ${type}${possessive} country of origin?`,
         };
         question = `What is ${fullTitle}${possessiveTitle} country of origin?`;
-        answer = `The country of ${fullTitle} is ${formatLocation(chain(imdb['Country']), true)}.`;
+        answer = `The country of ${fullTitle} is ${formatLocation(
+          chain(imdb["Country"]),
+          true
+        )}.`;
         break;
       case "Creator":
-          questions = {
-            p: `Who is the creator of it?`,
-            e: `Who is the creator of the ${type}?`
-          };
-          question = `Who is the creator of ${fullTitle}?`;
-          answer = `The creator of ${fullTitle} is ${chain(imdb['Creator'])}.`;
-          break;
+        questions = {
+          p: `Who is the creator of it?`,
+          e: `Who is the creator of the ${type}?`,
+        };
+        question = `Who is the creator of ${fullTitle}?`;
+        answer = `The creator of ${fullTitle} is ${chain(imdb["Creator"])}.`;
+        break;
       case "Creators":
         questions = {
           p: `Who is the creator of it?`,
-          e: `Who is the creator of the ${type}?`
+          e: `Who is the creator of the ${type}?`,
         };
         question = `Who is the creator of ${fullTitle}`;
-        answer = `The creators of ${fullTitle} are ${chain(imdb['Creators'])}.`;
+        answer = `The creators of ${fullTitle} are ${chain(imdb["Creators"])}.`;
         break;
       case "Cumulative Worldwide Gross":
         var gross = imdb["Cumulative Worldwide Gross"];
         questions = {
           p: "How much did it gross worldwide?",
-          e: `How much did the ${type} gross worldwide?`
+          e: `How much did the ${type} gross worldwide?`,
         };
         question = `How much did ${fullTitle} gross worldwide?`;
         answer = `${capitalizeFirstLetter(
@@ -1405,36 +1422,46 @@ const imc = () => {
         break;
       case "Director":
         questions = {
-          p: `Who ${tense('directs')} it?`,
-          e: `Who ${tense('directs')} the ${type}?`
+          p: `Who ${tense("directs")} it?`,
+          e: `Who ${tense("directs")} the ${type}?`,
         };
-        question = `Who ${tense('directs')} ${fullTitle}?`;
-        answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} directed by ${chain(imdb['Director'])}.`;
+        question = `Who ${tense("directs")} ${fullTitle}?`;
+        answer = `${capitalizeFirstLetter(fullTitle)} ${tense(
+          "is"
+        )} directed by ${chain(imdb["Director"])}.`;
         break;
       case "Directors":
         questions = {
-          p: `Who ${tense('directs')} it?`,
-          e: `Who ${tense('directs')} the ${type}?`
+          p: `Who ${tense("directs")} it?`,
+          e: `Who ${tense("directs")} the ${type}?`,
         };
-        question = `Who ${tense('directs')} ${fullTitle}?`;
-        answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} directed by ${chain(imdb['Directors'])}.`;
+        question = `Who ${tense("directs")} ${fullTitle}?`;
+        answer = `${capitalizeFirstLetter(fullTitle)} ${tense(
+          "is"
+        )} directed by ${chain(imdb["Directors"])}.`;
         break;
       case "Filming Locations":
         questions = {
-          p: `Where ${tense('is')} it shot?`,
-          e: `Where ${tense('is')} the ${type} shot?`
-        }
-        question = `Where ${tense('is')} ${fullTitle} shot?`;
-        answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} shot in ${formatLocation(chain(imdb['Filming Locations']), false)}.`;
+          p: `Where ${tense("is")} it shot?`,
+          e: `Where ${tense("is")} the ${type} shot?`,
+        };
+        question = `Where ${tense("is")} ${fullTitle} shot?`;
+        answer = `${capitalizeFirstLetter(fullTitle)} ${tense(
+          "is"
+        )} shot in ${formatLocation(chain(imdb["Filming Locations"]), false)}.`;
         break;
       case "Genre":
-        var genres = imdb['Genre'];
+        var genres = imdb["Genre"];
         questions = {
           p: `What genre is it?`,
-          e: `What genre is the ${type}?`
-        }
+          e: `What genre is the ${type}?`,
+        };
         question = `What genre is ${fullTitle}?`;
-        answer = `The ${genres.length > 1 ? "genres" : "genre"} of ${fullTitle} ${genres.length > 1 ? "are" : "is"} ${chain(genres)}.`;
+        answer = `The ${
+          genres.length > 1 ? "genres" : "genre"
+        } of ${fullTitle} ${genres.length > 1 ? "are" : "is"} ${chain(
+          genres
+        ).toLowerCase()}.`;
         break;
         break;
       case "Gross USA":
@@ -1443,20 +1470,24 @@ const imc = () => {
         break;
       case "Motion Picture Rating (MPAA)":
         // television parental guidelines
-        if (type === 'television series') {
+        if (type === "television series") {
           questions = {
             p: `What are its television parental guidelines?`,
-            e: `What are the ${type}${possessive} television parental guidelines?`
-          }
+            e: `What are the ${type}${possessive} television parental guidelines?`,
+          };
           question = `What are ${fullTitle}${possessiveTitle} television parental guidelines?`;
         } else {
           questions = {
             p: `What is its movie rating?`,
-            e: `What is the ${type}${possessive} movie rating?`
-          }
+            e: `What is the ${type}${possessive} movie rating?`,
+          };
           question = `What is ${fullTitle}${possessiveTitle} movie rating?`;
         }
-        answer = `${capitalizeFirstLetter(fullTitle)} is rated ${chain(imdb['Motion Picture Rating (MPAA)'].hasOwnProperty('Detailed') ? imdb['Motion Picture Rating (MPAA)'].Detailed : imdb['Motion Picture Rating (MPAA)'].Short )}.`;
+        answer = `${capitalizeFirstLetter(fullTitle)} is rated ${chain(
+          imdb["Motion Picture Rating (MPAA)"].hasOwnProperty("Detailed")
+            ? imdb["Motion Picture Rating (MPAA)"].Detailed
+            : imdb["Motion Picture Rating (MPAA)"].Short
+        )}.`;
         break;
       case "Opening Weekend USA":
         break;
@@ -1465,56 +1496,74 @@ const imc = () => {
       case "Plot":
         questions = {
           p: `What is its plot?`,
-          e: `What is the ${type}${possessive} plot?`
+          e: `What is the ${type}${possessive} plot?`,
         };
         question = `What is ${fullTitle}${possessiveTitle} plot?`;
-        answer = `${chain(imdb['Plot']).split(/\n/)[0]}`;
+        answer = `${chain(imdb["Plot"]).split(/\n/)[0]}`;
         break;
       case "Production Co":
         questions = {
           p: `What company produced it?`,
-          e: `What company produced the ${type}?`
+          e: `What company produced the ${type}?`,
         };
         question = `What company produced ${fullTitle}?`;
-        answer = `${capitalizeFirstLetter(fullTitle)} was produced by ${chain(imdb['Production Co'])}.`;
+        answer = `${capitalizeFirstLetter(fullTitle)} was produced by ${chain(
+          imdb["Production Co"]
+        )}.`;
         break;
       case "Rating":
         questions = {
           p: `What is its IMDb User Rating?`,
-          e: `What is the ${type}${possessive} IMDb User Rating?`
+          e: `What is the ${type}${possessive} IMDb User Rating?`,
         };
         question = `What is ${fullTitle}${possessiveTitle} IMDb User Rating?`;
-        answer = `${chain(imdb['Rating']['No. of Users'])} IMDb users have given a weighted average vote of ${chain(imdb['Rating']['Average Rating']).replace('/', 'out of')} for ${fullTitle}.`;
+        answer = `${chain(
+          imdb["Rating"]["No. of Users"]
+        )} IMDb users have given a weighted average vote of ${chain(
+          imdb["Rating"]["Average Rating"]
+        ).replace("/", "out of")} for ${fullTitle}.`;
         break;
       case "Release Date":
-        var ftCheckQ = imdb['Release Date'][0].includes('2021') ? 'is' : 'was';
-        var ftCheckA = imdb['Release Date'][0].includes('2021') ? 'will be' : 'was';
+        var ftCheckQ = imdb["Release Date"][0].includes("2021") ? "is" : "was";
+        var ftCheckA = imdb["Release Date"][0].includes("2021")
+          ? "will be"
+          : "was";
         questions = {
           p: `When ${ftCheckQ} its release date?`,
-          e: `When ${ftCheckQ} the ${type}${possessive} release date?`
+          e: `When ${ftCheckQ} the ${type}${possessive} release date?`,
         };
         question = `What ${ftCheckQ} ${fullTitle}${possessiveTitle} release date?`;
-        answer = `${capitalizeFirstLetter(fullTitle)} ${ftCheckA} released ${formatReleaseDate(chain(imdb['Release Date']))}.`;
+        answer = `${capitalizeFirstLetter(
+          fullTitle
+        )} ${ftCheckA} released ${formatReleaseDate(
+          chain(imdb["Release Date"])
+        )}.`;
         break;
       case "RuntimeM":
         break;
       case "RuntimeHM":
         questions = {
           p: `What is its runtime?`,
-          e: `What is the ${type}${possessive} runtime?`
+          e: `What is the ${type}${possessive} runtime?`,
         };
         question = `What is ${fullTitle}${possessiveTitle} runtime?`;
-        answer = `${capitalizeFirstLetter(fullTitle)}${possessiveTitle} runtime is ${formatRunTime(chain(imdb['RuntimeHM']))}.`;
+        answer = `${capitalizeFirstLetter(
+          fullTitle
+        )}${possessiveTitle} runtime is ${formatRunTime(
+          chain(imdb["RuntimeHM"])
+        )}.`;
         break;
       case "Sound Mix":
         break;
       case "Stars":
         questions = {
-          p: `Who ${tense('stars')} in it?`,
-          e: `Who ${tense('stars')} in the ${type}?`
+          p: `Who ${tense("stars")} in it?`,
+          e: `Who ${tense("stars")} in the ${type}?`,
         };
-        question = `Who ${tense('stars')} in ${fullTitle}?`;
-        answer = `${capitalizeFirstLetter(fullTitle)} stars ${chain(imdb['Stars'])}.`;
+        question = `Who ${tense("stars")} in ${fullTitle}?`;
+        answer = `${capitalizeFirstLetter(fullTitle)} stars ${chain(
+          imdb["Stars"]
+        )}.`;
         break;
       case "Storyline":
         break;
@@ -1523,81 +1572,92 @@ const imc = () => {
         break;
       case "Type":
         break;
-        // Default element
+      // Default element
       case "URL":
         // Default element
         break;
       case "Writer":
         questions = {
           p: `Who wrote it?`,
-          e: `Who wrote the ${type}?`
+          e: `Who wrote the ${type}?`,
         };
         question = `Who wrote ${fullTitle}?`;
-        answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} written by ${chain(imdb['Writer'])}.`;
+        answer = `${capitalizeFirstLetter(fullTitle)} ${tense(
+          "is"
+        )} written by ${chain(imdb["Writer"])}.`;
         break;
       case "Writers":
         questions = {
           p: `Who wrote it?`,
-          e: `Who wrote the ${type}?`
+          e: `Who wrote the ${type}?`,
         };
         question = `Who wrote ${fullTitle}?`;
-        answer = `${capitalizeFirstLetter(fullTitle)} ${tense('is')} written by ${chain(imdb['Writers'])}.`;
+        answer = `${capitalizeFirstLetter(fullTitle)} ${tense(
+          "is"
+        )} written by ${chain(imdb["Writers"])}.`;
         break;
       default:
         console.error(`${key} has not been accounted for in this version.`);
     }
-  
+
     if (questions && question && answer && source) {
       if (mcmode) {
-        var obj = {}
+        var obj = {};
         for (qKey in questions) {
-          obj[qKey] = [questions[qKey], question, answer, key === 'Rating' ? source + '/ratings?ref_=tt_ov_rt' : source].join("\t");
+          obj[qKey] = [
+            questions[qKey],
+            question,
+            answer,
+            key === "Rating" ? source + "/ratings?ref_=tt_ov_rt" : source,
+          ].join("\t");
           // obj[qKey] = [questions[qKey], key === 'Rating' ? source + '/ratings?ref_=tt_ov_rt' : source].join("\t");
         }
         lines.push(obj);
       } else {
-        lines.push([question, answer, key === 'Rating' ? source + '/ratings?ref_=tt_ov_rt' : source].join("\t"))
+        lines.push(
+          [
+            question,
+            answer,
+            key === "Rating" ? source + "/ratings?ref_=tt_ov_rt" : source,
+          ].join("\t")
+        );
       }
     }
   }
-  
-  var output = []
-  
-    lines.forEach(arr => {
-      if (mcmode) {
-        for (line in arr) {
-          output.push(arr[line])
-        }
-      } else {
-        output.push(arr)
+
+  var output = [];
+
+  lines.forEach((arr) => {
+    if (mcmode) {
+      for (line in arr) {
+        output.push(arr[line]);
       }
-    })
-  
-  
-  
+    } else {
+      output.push(arr);
+    }
+  });
+
   console.log(output.join("\n"));
   clipboard = output.join("\n");
-  
-  
-}
+};
 
 const gotMessage = (request, sender, sendResponse) => {
-  console.clear()
+  console.clear();
   const url = request.tabUrl;
-  if (url.includes('https://en.wikipedia.org/wiki/')) {
+  if (url.includes("https://en.wikipedia.org/wiki/")) {
     wmc();
-  } 
-  if (url.includes('https://www.imdb.com/title/tt')) {
+  }
+  if (url.includes("https://www.imdb.com/title/tt")) {
     imc();
   }
   if (clipboard) {
-    const dummy = document.createElement('textarea');
+    const dummy = document.createElement("textarea");
     document.body.appendChild(dummy);
     dummy.value = clipboard;
     dummy.select();
-    document.execCommand('copy');
+    document.execCommand("copy");
     document.body.removeChild(dummy);
-    console.log('Copied to clipboard!')
+    console.log("Copied to clipboard!");
   }
 };
 
