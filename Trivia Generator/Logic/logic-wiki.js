@@ -633,11 +633,11 @@ for (key in media.infobox) {
       break;
     case "Screenplay by":
       questions = {
-        p: `Who wrote its screenplay?`,
-        e: `Who wrote the ${type}${possessiveType} screenplay?`
+        p: `Who was its screenplay by?`,
+        e: `Who was the ${type}${possessiveType} screenplay by?`
       }
-      question = `Who wrote ${fullTitle}${possessive} screenplay?`;
-      answer = `The screenplay for ${fullTitle} was written by ${chainAnswer(infobox[key])}.`;
+      question = `Who was ${fullTitle}${possessive} screenplay by?`;
+      answer = `The screenplay for ${fullTitle} was by ${chainAnswer(infobox[key])}.`;
       break;
     case "Starring":
       questions = {
