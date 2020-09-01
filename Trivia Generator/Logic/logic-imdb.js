@@ -533,7 +533,7 @@ for (key in imdb) {
         e: `What genre is the ${type}?`
       }
       question = `What genre is ${fullTitle}?`;
-      answer = `The ${genres.length > 1 ? "genres" : "genre"} of ${fullTitle} ${genres.length > 1 ? "are" : "is"} ${chain(genres)}.`;
+      answer = `The ${genres.length > 1 ? "genres" : "genre"} of ${fullTitle} ${genres.length > 1 ? "are" : "is"} ${chain(genres).toLowerCase()}.`;
       break;
       break;
     case "Gross USA":
