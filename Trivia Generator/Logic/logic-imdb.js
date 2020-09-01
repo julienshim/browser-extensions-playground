@@ -177,7 +177,6 @@ capturedData.forEach((data, i) => {
             Short: [Rating],
           };
         } else {
-          console.log('Why am I here? 2')
           imdb["Motion Picture Rating (MPAA)"] = { Short: [Rating] };
         }
       }
@@ -542,11 +541,20 @@ for (key in imdb) {
     case "Language":
       break;
     case "Motion Picture Rating (MPAA)":
-      questions = {
-        p: `What is its movie rating?`,
-        e: `What is the ${type}${possessive} movie rating?`
+      // television parental guidelines
+      if (type === 'television series') {
+        questions = {
+          p: `What are its television parental guidelines?`,
+          e: `What are the ${type}${possessive} television parental guidelines?`
+        }
+        question = `What are ${fullTitle}${possessiveTitle} television parental guidelines?`;
+      } else {
+        questions = {
+          p: `What is its movie rating?`,
+          e: `What is the ${type}${possessive} movie rating?`
+        }
+        question = `What is ${fullTitle}${possessiveTitle} movie rating?`;
       }
-      question = `What is ${fullTitle}${possessiveTitle} movie rating?`;
       answer = `${capitalizeFirstLetter(fullTitle)} is rated ${chain(imdb['Motion Picture Rating (MPAA)'].hasOwnProperty('Detailed') ? imdb['Motion Picture Rating (MPAA)'].Detailed : imdb['Motion Picture Rating (MPAA)'].Short )}.`;
       break;
     case "Opening Weekend USA":
@@ -560,7 +568,6 @@ for (key in imdb) {
       };
       question = `What is ${fullTitle}${possessiveTitle} plot?`;
       answer = `${chain(imdb['Plot']).split(/\n/)[0]}`;
-      console.log(chain(imdb['Plot']))
       break;
     case "Production Co":
       questions = {
