@@ -1,7 +1,7 @@
 console.clear();
 console.log("Browser extension running");
 
-var mcmode = false;
+var mcmode = true;
 var clipboard;
 
 const wmc = () => {
@@ -507,7 +507,7 @@ const wmc = () => {
         isPlural = infobox[key].length > 1;
         answer = `The ${isPlural ? "genres" : "genre"} of ${fullTitle} ${
           isPlural ? "are" : "is"
-        } ${chainAnswer(infobox[key])}.`;
+        } ${chainAnswer(infobox[key].map((x) => x.toLowerCase()))}.`;
         break;
       case "Language":
         questions = {
