@@ -1,7 +1,7 @@
 console.clear();
 console.log("Browser extension running");
 
-var mcmode = true;
+var mcmode = false;
 var clipboard;
 
 const wmc = () => {
