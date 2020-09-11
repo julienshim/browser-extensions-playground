@@ -102,7 +102,7 @@ Note: Any data marked `//SKIPPED` will be either handled at a later time or remo
   "Production location": [],
   "Related shows": [],
   "Release date": [],
-  "Rotten Tomatoes": [],
+  "Rotten Tomatoes": [], // !!! EXPERIMENTAL !!!
   "Running time": [],
   "Screenplay by": [],
   "Starring": [],
