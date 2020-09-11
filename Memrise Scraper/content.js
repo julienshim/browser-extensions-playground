@@ -1,7 +1,50 @@
-console.log("Browser extension running");
+(function(){
+  setTimeout(() => {
+    console.clear();
+    console.log("Browser extension running...");
+  }, 1000)
+})();
 
-const getWords = (courseId, level) => {
-  const url = `https://www.memrise.com/ajax/session/?course_id=${courseId}&level_index=${level}&session_slug=preview`;
+const download = (data) => {
+  console.log('Downloading CSV...')
+  const blob = new Blob([data], {type: 'text/csv'})
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.setAttribute('hidden', '');
+  a.setAttribute('href', url);
+  const courseName = document.querySelector("div.course-details > a > h1").innerText;
+  a.setAttribute('download', `${courseName}.csv`);
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+const arrayToCsv = (dataArray) => {
+      console.log('Generating CSV...')
+      let maxHeaderLength = 0
+      let headers = [];
+      const csvRows = [];
+      // Find the max amount of keys and set as headers
+      for (const row of dataArray) {
+        if(Object.keys(row).length > maxHeaderLength) {
+          maxHeaderLength = Object.keys(row).length;
+          headers = Object.keys(row);
+        }
+      }
+      csvRows.push(headers.join(','));
+      for (const row of dataArray) {
+        const values = headers.map(header => {
+          const value = row[header] ? row[header] : '';
+          const escaped = value.replace(/"/g, '\\"')
+          return `"${escaped}"`;
+        })
+        csvRows.push(values.join(','));
+      }
+      return csvRows.join('\n');
+}
+
+const getWords = (courseId, level, levelEnd) => {
+  const url = `https://app.memrise.com/ajax/session/?course_id=${courseId}&level_index=${level}&session_slug=preview`;
   const data = { credentials: "same-origin" };
 
   return fetch(url, data)
@@ -11,24 +54,33 @@ const getWords = (courseId, level) => {
         .json()
         // map results
         .then((data) => {
-          return Object.keys(data.screens).map((row) => {
-            const { item, definition, attributes } = data.screens[row]["1"];
+          // data.screens are words per level
+          const levelWords = Object.keys(data.screens);
+          return levelWords.map((word) => {
+            // For each word in a level, we are only concerned with the item (target language word), the definition (in native language), and attributes (extra columns).
+            const { item, definition, attributes } = data.screens[word]["1"];
+            // Define the public 'faces' of the word we want to map out.
             const object = {
-              korean: item.value,
-              english: definition.value
+              item: item.value,
+              definition: definition.value
             };
+            // Since attributes are private we can just loop through them if they exist.
             if (attributes) {
-              attributes.forEach((attribute) => {
+              for (const attribute of attributes) {
                 object[attribute.label] = attribute.value;
               }
-            )}
+            }
             return object;
           });
         })
         .then((words) => {
-          return getWords(courseId, level + 1).then(
-            words.concat.bind(words)
-          );
+          if (level + 1 <= levelEnd) {
+            return getWords(courseId, level + 1, levelEnd).then(
+              words.concat.bind(words)
+            );
+          } else {
+            return words;
+          }
         })
       } else {
         return [];
@@ -39,30 +91,17 @@ const getWords = (courseId, level) => {
     });
 };
 
-const gotMessage = (request, sender, sendResponse) => {
+const getVocabularyList = (request, sender, sendResponse) => {
+  console.log('Generating vocabulary list...')
   const { tabUrl } = request;
   const levelStart = 1;
   const levelEnd = document.querySelectorAll('.level').length;
   const courseId = tabUrl.match(/(?:[\d]{1,})/)[0];
   getWords(courseId, levelStart, levelEnd)
     .then((words) => {
-      let max = 0
-      let keys = [];
-      words.forEach(x => {
-        if(Object.keys(x).length > max) {
-          max = Object.keys(x).length;
-          keys = Object.keys(x);
-        }
-      })
-      return words
-        .map((word) => {
-          const string = keys.map(x => word[x]).join("\t")
-          return `${string}\n`;
-        })
-        .join("");
+      const csv = arrayToCsv(words);
+      download(csv);
     })
-    // print
-    .then((csv) => console.log(csv));
 };
 
-chrome.runtime.onMessage.addListener(gotMessage);
+chrome.runtime.onMessage.addListener(getVocabularyList);

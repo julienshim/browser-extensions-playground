@@ -4,7 +4,7 @@
   "version": "1.0",
   "content_scripts": [
     {
-      "matches": ["https://www.memrise.com/course/*"],
+      "matches": ["https://app.memrise.com/course/*"],
       "js": ["content.js"]
     }
   ],
