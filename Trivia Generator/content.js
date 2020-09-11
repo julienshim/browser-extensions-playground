@@ -4,6 +4,69 @@ console.log("Browser extension running");
 var mcmode = false;
 var clipboard;
 
+handleStrip = (string) => {
+  let isWriting = true;
+  let isQuoting = false;
+  let hasClosed = true;
+  let stripped = "";
+  let isReferencing = false;
+
+  // no-plusplus
+  for (let i = 0; i < string.length; i += 1) {
+    const pText = string[i + 1] === "(";
+
+    if (string[i] === "[" && !isQuoting) {
+      isWriting = false;
+      hasClosed = false;
+      isReferencing = true;
+    }
+    // removes embedded (<url>)
+    if (pText) {
+      isWriting = false;
+      hasClosed = false;
+    }
+    if (string[i] === ")") {
+      hasClosed = true;
+    }
+    if (string[i] === '"') {
+      isQuoting = !isQuoting;
+    }
+    if (string[i] === "]") {
+      hasClosed = true;
+      if (string[i + 1] !== ":") {
+        isReferencing = false;
+      }
+    }
+    if (string[i + 1] === " " && isReferencing) {
+      isReferencing = !isReferencing;
+    }
+    if (
+      (string[i].match(/\s/) ||
+        string[i] === "," ||
+        string[i] === "." ||
+        string[i] === "!" ||
+        string[i] === ";" ||
+        string[i] === ":" ||
+        string[i] === '"' ||
+        string[i] === "?") &&
+      hasClosed &&
+      !isReferencing
+    ) {
+      isWriting = true;
+    }
+    if (isWriting) {
+      stripped += string[i];
+    }
+  }
+  return stripped;
+};
+
+//*******************************//
+//                               //
+//          Wikipedia            //
+//                               //
+//*******************************//
+
 const wmc = () => {
   // Data
 
@@ -81,18 +144,16 @@ const wmc = () => {
   // Capture Rotten Tomatoes
 
   var raw = [...document.querySelectorAll("p")].map(
-    (paragraph) => paragraph.textContent
+    (paragraph) => handleStrip(paragraph.textContent.trim())
   );
   if (
     raw.filter((contents) => contents.includes("Rotten Tomatoes")).length > 0
   ) {
     media.infobox["Rotten Tomatoes"] = [
-      `${
-        raw
+      `${raw
           .filter((contents) => contents.includes("Rotten Tomatoes"))[0]
           .split(". ")
-          .filter((x) => x.includes("Rotten Tomatoes"))[0]
-      }.`,
+          .filter((x) => x.includes("Rotten Tomatoes"))[0]}.`,
     ];
   }
 
@@ -223,33 +284,24 @@ const wmc = () => {
   // If 'Based on' exists, format it.
 
   if (media.infobox.hasOwnProperty("Based on")) {
-    if (
-      media.infobox["Based on"].split(/\s/).filter((x) => x.includes("by"))
-        .length > 1
-    ) {
-      media.infobox["Based on"] = splitBy(
-        media.infobox["Based on"].split(/\n/)
-      );
+    if (media.infobox["Based on"].includes("by")) {
+      if (
+        media.infobox["Based on"].split(/\s/).filter((x) => x.includes("by"))
+          .length > 1
+      ) {
+        media.infobox["Based on"] = splitBy(
+          media.infobox["Based on"].split(/\n/)
+        );
+      } else {
+        var [book, author] = media.infobox["Based on"].split(/by |by/);
+        media.infobox["Based on"] = [
+          [book.trim(), chainData(author.trim().split(/\n/))].join(" by "),
+        ];
+      }
     } else {
-      var [book, author] = media.infobox["Based on"].split(/by |by/);
-      media.infobox["Based on"] = [
-        [book.trim(), chainData(author.trim().split(/\n/))].join(" by "),
-      ];
+      media.infobox["Based on"] = [media.infobox["Based on"]];
     }
   }
-  // console.log(media);
-  // console.log(media.infobox)
-
-  //
-  // var obj = {};
-
-  // rows.forEach((x) => {
-  //   var temp = x.children[1].innerText;
-  //   if (temp.includes("[")) {
-  //     temp = `${temp.slice(0, temp.indexOf("["))}`;
-  //   }
-  //   obj[x.children[0].textContent] = temp;
-  // });
 
   var lines = [];
 
@@ -348,7 +400,7 @@ const wmc = () => {
         };
         question = `What ${tense("is")} ${fullTitle}${possessive} budget?`;
         answer = `The budget of ${fullTitle} ${tense("is")} ${
-          chainAnswer(infobox[key]).split("[")[0]
+          handleStrip(chainAnswer(infobox[key]))
         }.`;
         break;
       case "Camera setup":
@@ -508,6 +560,12 @@ const wmc = () => {
         answer = `The ${isPlural ? "genres" : "genre"} of ${fullTitle} ${
           isPlural ? "are" : "is"
         } ${chainAnswer(infobox[key].map((x) => x.toLowerCase()))}.`;
+        break;
+      case "Hepburn":
+        // Skipped
+        break;
+      case "Japanese":
+        // Skipped
         break;
       case "Language":
         questions = {
@@ -855,52 +913,15 @@ const wmc = () => {
     }
   });
 
-  // console.log(media);
-
   console.log(output.join("\n"));
   clipboard = output.join("\n");
-
-  // Points of interest
-
-  // var raw = [...document.querySelectorAll("p")];
-  // var interests = [];
-  // var filinterests = [];
-
-  // raw.forEach((x) => {
-  //   // interests = interests.concat(` ${x.textContent}`.match(/\s+[^.]*[.]/gi))
-  //   interests = interests.concat(` ${x.textContent}`.split(/(?<!\..)[.?!]\s+/gi));
-  //   // interests = interests.concat(` ${x.textContent}`.replace(/\s[a-z]{1,2}\./, ).replace(/\[\d{1,2}\]/gi, '').replace(/\s{2}/, " ").split(/(?<!\..)[.?!]\s+/gi).map(x=> `${x.trim()}.`).filter(x => x.split(' ').length < 30))
-  // });
-
-  // interests = interests.filter((x) => x.trim()).map((x) => `${x.trim()}.`);
-
-  // var n = 0;
-  // var clean = [];
-
-  // while (n < interests.length) {
-  //   if (interests[n].match(/\s[a-z]{1,2}\./gi)) {
-  //     clean.push(`${interests[n]} ${interests[n + 1]}`);
-  //     n += 2;
-  //   } else {
-  //     clean.push(interests[n]);
-  //     n += 1;
-  //   }
-  // }
-
-  // clean.forEach((x) => {
-  //   media.keyterms.forEach((y) => {
-  //     if (x.includes(y)) {
-  //       filinterests.push(x);
-  //     }
-  //   });
-  // });
-
-  // console.log(
-  //   [...new Set(filinterests)]
-  //     .filter((x) => x.split(" ").length < 30)
-  //     .map((x) => x.replace(/\[\d{1,2}\]/gi, ""))
-  // );
 };
+
+//*******************************//
+//                               //
+//              IMDb             //
+//                               //
+//*******************************//
 
 const imc = () => {
   var countryConverstion = {
@@ -1230,8 +1251,6 @@ const imc = () => {
         imdb[key] = value;
       }
     }
-    // var [key, value] = temp.split(/:\s{0,}/);
-    // imdb[key] = key === "Plot" ? [data.split(' See full summary')[0]] : value.split(", ");
   });
 
   //Capture Source
@@ -1610,7 +1629,6 @@ const imc = () => {
             answer,
             key === "Rating" ? source + "/ratings?ref_=tt_ov_rt" : source,
           ].join("\t");
-          // obj[qKey] = [questions[qKey], key === 'Rating' ? source + '/ratings?ref_=tt_ov_rt' : source].join("\t");
         }
         lines.push(obj);
       } else {
