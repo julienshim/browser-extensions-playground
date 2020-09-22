@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <h1>Memrise Scraper</h1>
+    <div id="unfound-container" class="hidden">
+      <p>No Memrise course found!</p>
+    </div>
+    <div id="download-container">
+      <p id="course-found" style="padding: 12px"></p>
+      <div id="button-container">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M12 21l-8-9h6v-12h4v12h6l-8 9zm9-1v2h-18v-2h-2v4h22v-4h-2z"
+          />
+        </svg>
+        <span>Download File</span>
+      </div>
+    </div>
+  </body>
+  <script src="popup.js"></script>
+</html>
